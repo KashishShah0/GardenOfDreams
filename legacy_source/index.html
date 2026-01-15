@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden of Dreams | POS</title>
+    <!-- Fonts: Inter for UI, Playfair Display for Elegance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .variant-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .variant-btn {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            color: #333;
+        }
+
+        .variant-btn:hover {
+            border-color: var(--primary-color);
+            background: #f8f9fa;
+        }
+
+        .variant-btn strong {
+            display: block;
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-layout">
+        <!-- Navigation Rail -->
+        <nav class="nav-rail">
+            <div class="nav-brand">
+                <!-- Logo removed as per user request -->
+            </div>
+            <div class="nav-items">
+                <button class="nav-btn active" onclick="switchView('pos')" title="New Order">
+                    <svg width="24" height="24" fill="none" class="icon" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                    <span>Menu</span>
+                </button>
+                <button class="nav-btn" onclick="switchView('orders')" title="All Orders">
+                    <svg width="24" height="24" fill="none" class="icon" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01">
+                        </path>
+                    </svg>
+                    <span>Orders</span>
+                </button>
+                <button class="nav-btn" onclick="switchView('kitchen')" title="Kitchen">
+                    <svg width="24" height="24" fill="none" class="icon" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10">
+                        </path>
+                    </svg>
+                    <span>Kitchen</span>
+                </button>
+                <button class="nav-btn" onclick="switchView('bar')" title="Bar">
+                    <svg width="24" height="24" fill="none" class="icon" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 10V3L4 14h7v7l9-11h-7z" style="display:none"></path> <!-- Flash icon placeholder -->
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3a4 4 0 100 8 4 4 0 000-8z" style="display:none"></path>
+                        <!-- Wine Glass Icon -->
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                    <span>Bar</span>
+                </button>
+                <button class="nav-btn" onclick="switchView('revenue')" title="Revenue">
+                    <svg width="24" height="24" fill="none" class="icon" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                        </path>
+                    </svg>
+                    <span>Revenue</span>
+                </button>
+                <!-- Mobile Only Cart Toggle -->
+                <button class="nav-btn mobile-only" onclick="toggleMobileCart()" title="Current Order">
+                    <svg width="24" height="24" fill="none" class="icon" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                        </path>
+                    </svg>
+                    <span>Cart</span>
+                </button>
+            </div>
+            <div class="nav-footer">
+                <!-- User avatar or settings could go here -->
+            </div>
+        </nav>
+
+        <!-- Main POS View -->
+        <div id="view-pos" class="view-section active">
+            <div class="pos-layout">
+                <main class="menu-section">
+                    <header class="top-bar">
+                        <div class="header-left">
+                            <select id="table-select" class="table-select">
+                                <option value="1">Table 1</option>
+                                <option value="2">Table 2</option>
+                                <option value="3">Table 3</option>
+                                <option value="4">Table 4</option>
+                                <option value="5">Table 5</option>
+                                <option value="6">Table 6</option>
+                                <option value="7">Table 7</option>
+                                <option value="8">Table 8</option>
+                                <option value="9">Table 9</option>
+                                <option value="10">Table 10</option>
+                                <option value="11">Table 11</option>
+                                <option value="12">Table 12</option>
+                            </select>
+                        </div>
+
+                        <div class="header-center">
+                            <div class="brand-text">
+                                <h1>Garden of Dreams</h1>
+                                <p>Restaurant, Bar & Party Venue</p>
+                            </div>
+                        </div>
+
+                        <div class="header-right">
+                            <div class="search-bar">
+                                <svg width="20" height="20" fill="none" class="icon-search" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                                <input type="text" id="search-input" placeholder="Search menu...">
+                            </div>
+                        </div>
+                    </header>
+
+                    <div class="categories-scrubber" id="category-filters">
+                        <!-- Categories injected by JS -->
+                        <button class="cat-pill active" data-cat="all">All</button>
+                    </div>
+
+                    <div class="menu-grid" id="menu-grid">
+                        <!-- Menu Items injected by JS -->
+                    </div>
+                </main>
+
+                <aside class="order-sidebar">
+                    <div class="sidebar-header">
+                        <h2>Current Order</h2>
+                        <div class="order-id">Table 1 • --</div>
+                    </div>
+
+                    <div class="order-items-list" id="order-list">
+                        <!-- Order Items injected by JS -->
+                    </div>
+
+                    <div class="empty-state">
+                        <p>No items added yet</p>
+                    </div>
+
+                    <div class="billing-section">
+                        <div class="bill-row">
+                            <span>Subtotal</span>
+                            <span id="subtotal-price">Rs. 0.00</span>
+                        </div>
+                        <!-- Tax removed as requested -->
+                        <div class="bill-row total">
+                            <span>Total</span>
+                            <span id="total-price">Rs. 0.00</span>
+                        </div>
+                        <button class="checkout-btn" onclick="checkout()">
+                            <span>Place Order</span>
+                        </button>
+                    </div>
+                </aside>
+            </div>
+        </div>
+
+
+        <!-- NEW: All Orders View -->
+        <div id="view-orders" class="view-section hidden">
+            <header class="page-header">
+                <div>
+                    <h1>All Orders</h1>
+                    <div class="header-actions-row">
+                        <button class="reset-link" onclick="resetSystem()">Reset Day / Clear All</button>
+                        <span class="divider">•</span>
+                        <button id="btn-connect" class="theme-connect-btn" onclick="connectPrinter()">
+                            <span class="status-dot"></span>
+                            Connect Printer
+                        </button>
+                    </div>
+                </div>
+                <div class="stats-pills">
+                    <span class="stat-pill">Total Orders: <b id="stat-count">0</b></span>
+                    <span class="stat-pill">Today's Revenue: <b id="stat-revenue">Rs. 0.00</b></span>
+                </div>
+            </header>
+            <div class="orders-grid" id="all-orders-grid">
+                <!-- Past orders injected here -->
+            </div>
+        </div>
+
+        <!-- NEW: Kitchen View -->
+        <div id="view-kitchen" class="view-section hidden">
+            <header class="page-header">
+                <div>
+                    <h1>Kitchen Dashboard</h1>
+                    <p class="subtitle" style="margin-top: 0.5rem">Live Prep Queue</p>
+                </div>
+                <div class="stats-pills">
+                    <span class="stat-pill">Pending Dishes: <b id="kitchen-pending-count">0</b></span>
+                    <span class="stat-pill">Kitchen Revenue: <b id="kitchen-revenue">Rs. 0</b></span>
+                </div>
+            </header>
+            <div class="orders-grid" id="kitchen-grid">
+                <!-- Kitchen orders injected here -->
+            </div>
+        </div>
+
+        <!-- NEW: Bar View -->
+        <div id="view-bar" class="view-section hidden">
+            <header class="page-header">
+                <div>
+                    <h1>Bar Dashboard</h1>
+                    <p class="subtitle" style="margin-top: 0.5rem">Live Drink Queue</p>
+                </div>
+                <div class="stats-pills">
+                    <span class="stat-pill">Pending Drinks: <b id="bar-pending-count">0</b></span>
+                    <span class="stat-pill">Bar Revenue: <b id="bar-revenue">Rs. 0</b></span>
+                </div>
+            </header>
+            <div class="orders-grid" id="bar-grid">
+                <!-- Bar orders injected here -->
+            </div>
+        </div>
+
+        <!-- NEW: Revenue View -->
+        <div id="view-revenue" class="view-section hidden">
+            <header class="page-header">
+                <div>
+                    <h1>Revenue & Analytics</h1>
+                    <p class="subtitle" style="margin-top: 0.5rem">Financial Overview</p>
+                </div>
+                <div class="stats-pills">
+                    <span class="stat-pill">Total Revenue: <b id="rev-total">Rs. 0</b></span>
+                    <span class="stat-pill">Avg Order Value: <b id="rev-aov">Rs. 0</b></span>
+                </div>
+            </header>
+
+            <div class="revenue-dashboard">
+                <div class="revenue-card full-width">
+                    <h3>Sales Overview</h3>
+                    <div class="financial-stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-label">Today's Revenue</span>
+                            <strong class="stat-value" id="fin-today">Rs. 0</strong>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">Total Orders</span>
+                            <strong class="stat-value" id="fin-orders">0</strong>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-label">Items Sold</span>
+                            <strong class="stat-value" id="fin-items">0</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="revenue-card">
+                    <h3>🏆 Top Selling Dishes</h3>
+                    <div class="ranking-list" id="top-selling-list">
+                        <!-- Injected JS -->
+                    </div>
+                </div>
+
+                <div class="revenue-card">
+                    <h3>📉 Least Sold Dishes</h3>
+                    <div class="ranking-list" id="least-selling-list">
+                        <!-- Injected JS -->
+                    </div>
+                </div>
+
+                <div class="revenue-card">
+                    <h3>🧊 Unsold Dishes</h3>
+                    <div class="ranking-list" id="unsold-list">
+                        <!-- Injected JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receipt Print Layout (Hidden on Screen) -->
+    <div id="receipt-preview" class="receipt-container hidden">
+        <div class="receipt-header">
+            <h2 id="print-brand">Garden of Dreams</h2>
+            <p class="store-address">Thamel, Kathmandu, Nepal</p>
+            <p class="store-contact">Tel: +977-1-4700000 | VAT: 123456789</p>
+            <p class="receipt-title">RECEIPT</p>
+        </div>
+
+        <div class="receipt-details">
+            <div class="dt-row">
+                <span>Inv No: <b id="print-order-id">#</b></span>
+                <span>Date: <span id="print-date"></span></span>
+            </div>
+            <div class="dt-row">
+                <span>Table: <b id="print-table"></b></span>
+                <span>Time: <span id="print-time"></span></span>
+            </div>
+        </div>
+
+        <div class="receipt-divider dashed"></div>
+
+        <div class="receipt-body">
+            <table class="receipt-table">
+                <thead>
+                    <tr>
+                        <th class="col-item">Item</th>
+                        <th class="col-price">Price</th>
+                        <th class="col-qty">Qty</th>
+                        <th class="col-total">Total</th>
+                    </tr>
+                </thead>
+                <tbody id="print-items">
+                    <!-- Items injected here -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="receipt-divider dashed"></div>
+
+        <div class="receipt-totals">
+            <div class="total-row">
+                <span>Sub-Total:</span>
+                <span id="print-subtotal"></span>
+            </div>
+            <!-- Discount/Tax place holders if needed -->
+            <div class="receipt-divider dotted"></div>
+            <div class="total-row final">
+                <span>Total:</span>
+                <span id="print-total"></span>
+            </div>
+        </div>
+
+        <div class="receipt-footer">
+            <p>** THANK YOU !! VISIT AGAIN **</p>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="check-animation">✓</div>
+            <h3>Order Placed Successfully!</h3>
+            <p>Order <strong id="modal-order-id">#--</strong> for <strong id="modal-table-num">Table --</strong> has
+                been sent to the kitchen.</p>
+            <div class="modal-actions">
+                <!-- Print button removed as requested -->
+                <button class="secondary-btn" onclick="closeModal()">Start New Order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Variant Selection Modal -->
+    <div id="variant-modal" class="modal hidden">
+        <div class="modal-content">
+            <h3>Select Quantity</h3>
+            <p id="variant-modal-title">Choose an option</p>
+            <div id="variant-options" class="variant-grid">
+                <!-- Options injected by JS -->
+            </div>
+            <div class="modal-actions">
+                <button class="secondary-btn" onclick="closeVariantModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

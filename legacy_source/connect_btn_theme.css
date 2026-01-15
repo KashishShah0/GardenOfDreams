@@ -1,0 +1,60 @@
+/* Header Actions Row */
+.header-actions-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.divider {
+    color: hsl(var(--color-text-muted));
+    opacity: 0.5;
+}
+
+/* Themed Connect Button */
+.theme-connect-btn {
+    background: transparent;
+    border: 1px solid hsl(var(--color-accent));
+    color: hsl(var(--color-accent));
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+
+.theme-connect-btn:hover {
+    background: hsl(var(--color-accent), 0.1);
+    box-shadow: 0 0 10px rgba(221, 170, 68, 0.2);
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #ef4444;
+    /* Red */
+    border-radius: 50%;
+    display: block;
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.4);
+}
+
+.theme-connect-btn.connected {
+    border-color: #10b981;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.theme-connect-btn.connected .status-dot {
+    background-color: #10b981;
+    /* Green */
+    box-shadow: 0 0 8px #10b981;
+}
+
+.theme-connect-btn.connected:hover {
+    background: rgba(16, 185, 129, 0.1);
+}

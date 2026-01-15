@@ -1,0 +1,242 @@
+import { createContext, useState, useContext, useEffect } from 'react';
+import { menuItems, categories } from '../data/menuData';
+import { getSection } from '../utils/helpers';
+
+const POSContext = createContext();
+
+export const usePOS = () => useContext(POSContext);
+
+export const POSProvider = ({ children }) => {
+    // UI State
+    const [activeCategory, setActiveCategory] = useState('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [activeView, setActiveView] = useState('pos'); // pos, orders, kitchen, bar, revenue
+    const [isMobileCartOpen, setIsMobileCartOpen] = useState(false);
+
+    // Business Data
+    const [cart, setCart] = useState([]);
+    const [tableNumber, setTableNumber] = useState(1);
+
+    // BACKEND DATA
+    const [allOrders, setAllOrders] = useState([]);
+    const [currentOrderId, setCurrentOrderId] = useState(1);
+
+    // 1. Initial Load & Polling
+    const API_URL = 'http://localhost:5000/api/orders';
+
+    const fetchOrders = async () => {
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            setAllOrders(data);
+
+            // Calculate next ID
+            if (data.length > 0) {
+                const maxId = Math.max(...data.map(o => o.id));
+                setCurrentOrderId(maxId + 1);
+            } else {
+                setCurrentOrderId(1);
+            }
+        } catch (err) {
+            console.error("Failed to fetch orders:", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchOrders(); // Initial fetch
+        const interval = setInterval(fetchOrders, 3000); // Poll every 3 seconds
+        return () => clearInterval(interval);
+    }, []);
+
+    // 2. Actions
+    const addToCart = (id, variantName = null, variantPrice = null) => {
+        const item = menuItems.find(i => i.id === id);
+        if (!item) return;
+
+        const cartItem = {
+            ...item,
+            variantName,
+            variantPrice: variantPrice || item.price,
+            qty: 1
+        };
+
+        setCart(prev => {
+            const existing = prev.find(i => i.id === id && i.variantName === variantName);
+            if (existing) {
+                return prev.map(i => (i.id === id && i.variantName === variantName) ? { ...i, qty: i.qty + 1 } : i);
+            }
+            return [...prev, cartItem];
+        });
+
+        // Auto-open mobile cart on add
+        if (window.innerWidth <= 768) setIsMobileCartOpen(true);
+    };
+
+    const updateQty = (index, change) => {
+        setCart(prev => {
+            const newCart = [...prev];
+            newCart[index].qty += change;
+            if (newCart[index].qty <= 0) return newCart.filter((_, i) => i !== index);
+            return newCart;
+        });
+    };
+
+    const checkout = async () => {
+        if (cart.length === 0) return null;
+
+        const total = cart.reduce((sum, item) => sum + (item.variantPrice * item.qty), 0);
+
+        const newOrder = {
+            id: currentOrderId,
+            table: tableNumber,
+            items: cart,
+            total: total,
+            timestamp: new Date().toISOString(),
+            served: false,
+            paid: false
+        };
+
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newOrder)
+            });
+
+            if (res.ok) {
+                const savedOrder = await res.json();
+                setCart([]);
+                setCurrentOrderId(prev => prev + 1);
+                setIsMobileCartOpen(false);
+                fetchOrders(); // Refresh immediately
+                return savedOrder;
+            }
+        } catch (err) {
+            alert('Failed to place order: ' + err.message);
+        }
+        return null;
+    };
+
+    const toggleServed = async (orderId) => {
+        try {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            await fetch(`${API_URL}/${orderId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ served: !order.served })
+            });
+            fetchOrders();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const togglePaid = async (orderId) => {
+        try {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            await fetch(`${API_URL}/${orderId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ paid: !order.paid })
+            });
+            fetchOrders();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const deleteOrder = async (orderId) => {
+        try {
+            await fetch(`${API_URL}/${orderId}`, { method: 'DELETE' });
+            fetchOrders();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const deleteItemFromOrder = async (orderId, itemIndex) => {
+        const order = allOrders.find(o => o.id === orderId);
+        if (!order) return;
+
+        const updatedItems = order.items.filter((_, idx) => idx !== itemIndex);
+        const newTotal = updatedItems.reduce((sum, i) => sum + (i.variantPrice || i.price) * i.qty, 0);
+
+        try {
+            await fetch(`${API_URL}/${orderId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: updatedItems, total: newTotal })
+            });
+            fetchOrders();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const toggleItemStatus = async (orderId, itemIndex) => {
+        const order = allOrders.find(o => o.id === orderId);
+        if (!order) return;
+
+        const updatedItems = [...order.items];
+        const currentStatus = updatedItems[itemIndex].status || 'pending';
+        const nextStatus = currentStatus === 'pending' ? 'preparing' : (currentStatus === 'preparing' ? 'ready' : 'pending');
+
+        updatedItems[itemIndex] = { ...updatedItems[itemIndex], status: nextStatus };
+
+        try {
+            await fetch(`${API_URL}/${orderId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: updatedItems })
+            });
+            fetchOrders();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const resetSystem = async () => {
+        if (!confirm('Are you sure you want to delete ALL history?')) return;
+        try {
+            await fetch(API_URL, { method: 'DELETE' });
+            fetchOrders();
+        } catch (err) { console.error(err); }
+    };
+
+    const value = {
+        menuItems,
+        categories,
+        activeCategory,
+        setActiveCategory,
+        searchQuery,
+        setSearchQuery,
+        cart,
+        addToCart,
+        updateQty,
+        checkout,
+        allOrders,
+        currentOrderId,
+        activeView,
+        setActiveView,
+        isMobileCartOpen,
+        setIsMobileCartOpen,
+        tableNumber,
+        setTableNumber,
+        toggleServed,
+        togglePaid,
+        deleteOrder,
+        deleteItemFromOrder,
+        toggleItemStatus,
+        resetSystem
+    };
+
+    return (
+        <POSContext.Provider value={value}>
+            {children}
+        </POSContext.Provider>
+    );
+};
