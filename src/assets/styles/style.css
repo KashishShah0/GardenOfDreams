@@ -312,6 +312,23 @@ h3 {
     gap: var(--space-lg);
 }
 
+@media (max-width: 768px) {
+    .orders-grid {
+        display: flex;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+        gap: 1rem;
+        scroll-snap-type: x mandatory;
+    }
+
+    .orders-grid .order-ticket {
+        min-width: 85vw;
+        /* Show most of the card */
+        scroll-snap-align: center;
+        flex-shrink: 0;
+    }
+}
+
 .order-ticket {
     background: hsl(var(--color-bg-sidebar));
     padding: var(--space-lg);

@@ -7,7 +7,19 @@ const OrdersView = () => {
     const { allOrders, resetSystem, toggleServed, togglePaid, deleteOrder, deleteItemFromOrder } = usePOS();
     const [printerConnected, setPrinterConnected] = useState(false);
 
-    const sortedOrders = [...allOrders].reverse();
+    const sortedOrders = [...allOrders].sort((a, b) => {
+        const getPriority = (order) => {
+            if (!order.served && !order.paid) return 0;
+            if (order.served && !order.paid) return 1;
+            if (order.served && order.paid) return 2;
+            return 3; // Wildcard case (e.g. paid but not served)
+        };
+
+        const diff = getPriority(a) - getPriority(b);
+        if (diff !== 0) return diff;
+
+        return new Date(b.timestamp) - new Date(a.timestamp); // Newest first
+    });
 
     // Stats
     const todayStr = new Date().toLocaleDateString();
