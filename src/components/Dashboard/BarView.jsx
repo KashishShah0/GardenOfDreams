@@ -36,8 +36,7 @@ const BarView = () => {
         <div id="view-bar" className="view-section active">
             <header className="page-header">
                 <div>
-                    <h1>Bar Dashboard</h1>
-                    <p className="subtitle" style={{ marginTop: '0.5rem' }}>Live Drink Queue</p>
+                    {/* Header removed as per user request */}
                 </div>
                 <div className="stats-pills">
                     <span className="stat-pill">Pending Drinks: <b id="bar-pending-count">{activeOrders.length}</b></span>

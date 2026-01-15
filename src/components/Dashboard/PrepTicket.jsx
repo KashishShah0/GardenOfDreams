@@ -6,8 +6,11 @@ const PrepTicket = ({ order, relevantItems, viewContext }) => {
     // Check if all relevant items are ready
     const allReady = relevantItems.every(({ item }) => item.status === 'ready');
 
+    // Check for preparing state: not all ready, but at least one item is preparing
+    const isPreparing = !allReady && relevantItems.some(({ item }) => item.status === 'preparing');
+
     return (
-        <div className={`order-ticket kitchen-ticket ${allReady ? 'all-ready' : ''}`}>
+        <div className={`order-ticket kitchen-ticket ${allReady ? 'all-ready' : ''} ${isPreparing ? 'preparing' : ''}`}>
             <div className="ticket-header">
                 <div>
                     <span className="ticket-id">#{order.id} • Table {order.table}</span>

@@ -36,8 +36,7 @@ const KitchenView = () => {
         <div id="view-kitchen" className="view-section active">
             <header className="page-header">
                 <div>
-                    <h1>Kitchen Dashboard</h1>
-                    <p className="subtitle" style={{ marginTop: '0.5rem' }}>Live Prep Queue</p>
+                    {/* Header removed as per user request */}
                 </div>
                 <div className="stats-pills">
                     <span className="stat-pill">Pending Dishes: <b id="kitchen-pending-count">{activeOrders.length}</b></span>

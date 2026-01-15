@@ -24,7 +24,7 @@ const OrdersView = () => {
         <div id="view-orders" className="view-section active">
             <header className="page-header">
                 <div>
-                    <h1>All Orders</h1>
+                    {/* Header removed */}
                     <div className="header-actions-row">
                         <button className="reset-link" onClick={resetSystem}>Reset Day / Clear All</button>
                         <span className="divider">•</span>

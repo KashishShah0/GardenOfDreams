@@ -25,6 +25,48 @@
 
     --radius-md: 12px;
     --radius-lg: 20px;
+
+    /* Spacing Tokens */
+    --space-2xs: 0.25rem;
+    /* 4px */
+    --space-xs: 0.5rem;
+    /* 8px */
+    --space-sm: 0.75rem;
+    /* 12px */
+    --space-md: 1rem;
+    /* 16px */
+    --space-lg: 1.5rem;
+    /* 24px */
+    --space-xl: 2rem;
+    /* 32px */
+    --space-2xl: 3rem;
+    /* 48px */
+    --space-3xl: 4rem;
+    /* 64px */
+
+    /* Typography Tokens */
+    --font-xs: 0.75rem;
+    /* 12px */
+    --font-sm: 0.875rem;
+    /* 14px */
+    --font-base: 1rem;
+    /* 16px */
+    --font-lg: 1.125rem;
+    /* 18px */
+    --font-xl: 1.25rem;
+    /* 20px */
+    --font-2xl: 1.5rem;
+    /* 24px */
+    --font-3xl: 1.875rem;
+    /* 30px */
+    --font-4xl: 2.25rem;
+    /* 36px */
+
+    /* Font Weights */
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
 }
 
 * {
@@ -64,7 +106,7 @@ h3 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.5rem 0;
+    padding: var(--space-lg) 0;
     z-index: 100;
 }
 
@@ -74,7 +116,7 @@ h3 {
     object-fit: contain;
     border-radius: 50%;
     /* Rounded */
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
     border: 2px solid hsl(var(--color-accent), 0.5);
     box-shadow: 0 0 15px rgba(221, 170, 68, 0.2);
 }
@@ -82,7 +124,7 @@ h3 {
 .nav-items {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: var(--space-lg);
     width: 100%;
 }
 
@@ -91,7 +133,7 @@ h3 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: var(--space-2xs);
     background: transparent;
     border: none;
     cursor: pointer;
@@ -125,12 +167,12 @@ h3 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.2rem;
+    gap: var(--space-2xs);
 }
 
 .brand-text h1 {
     font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
+    font-size: var(--font-4xl);
     color: hsl(var(--color-accent));
     /* Gold */
     line-height: 1.1;
@@ -141,7 +183,7 @@ h3 {
 
 .brand-text p {
     font-family: 'Inter', sans-serif;
-    font-size: 0.8rem;
+    font-size: var(--font-xs);
     color: hsl(var(--color-text-main));
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -152,7 +194,7 @@ h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0 2rem 0;
+    padding: var(--space-md) 0 var(--space-xl) 0;
     position: relative;
     /* height: 160px; Removed fixed height to let content dictate, but ensure alignment */
 }
@@ -191,7 +233,7 @@ h3 {
 
 
 .nav-btn span {
-    font-size: 0.7rem;
+    font-size: var(--font-xs);
     font-weight: 500;
 }
 
@@ -213,8 +255,9 @@ h3 {
 }
 
 /* ORDERS VIEW */
-#view-orders {
-    padding: 2rem 3rem;
+#view-orders,
+#view-bar {
+    padding: var(--space-xl) var(--space-2xl);
     background-color: hsl(var(--color-bg-main));
     overflow-y: auto;
 }
@@ -223,7 +266,7 @@ h3 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
 }
 
 .reset-link {
@@ -231,7 +274,7 @@ h3 {
     border: none;
     color: #e53935;
     /* Red */
-    font-size: 0.8rem;
+    font-size: var(--font-xs);
     cursor: pointer;
     text-decoration: underline;
     margin-top: 0.3rem;
@@ -244,14 +287,14 @@ h3 {
 
 .stats-pills {
     display: flex;
-    gap: 1rem;
+    gap: var(--space-md);
 }
 
 .stat-pill {
     background: hsl(var(--color-bg-sidebar));
-    padding: 0.6rem 1.2rem;
+    padding: var(--space-xs) var(--space-sm);
     border-radius: 100px;
-    font-size: 0.9rem;
+    font-size: var(--font-sm);
     color: hsl(var(--color-text-muted));
     box-shadow: var(--shadow-sm);
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -266,12 +309,12 @@ h3 {
 .orders-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
+    gap: var(--space-lg);
 }
 
 .order-ticket {
     background: hsl(var(--color-bg-sidebar));
-    padding: 1.5rem;
+    padding: var(--space-lg);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
     border-top: 4px solid hsl(var(--color-accent));
@@ -284,29 +327,29 @@ h3 {
 .ticket-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 1rem;
-    padding-bottom: 0.8rem;
+    margin-bottom: var(--space-md);
+    padding-bottom: var(--space-sm);
     border-bottom: 1px dashed hsl(var(--color-text-muted), 0.2);
 }
 
 .ticket-id {
     font-weight: 700;
-    font-size: 1.1rem;
+    font-size: var(--font-lg);
 }
 
 .ticket-time {
-    font-size: 0.8rem;
+    font-size: var(--font-xs);
     color: hsl(var(--color-text-muted));
 }
 
 .ticket-items {
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-md);
     border-bottom: 1px solid hsl(var(--color-text-muted), 0.1);
-    padding-bottom: 1rem;
+    padding-bottom: var(--space-md);
 }
 
 .ticket-item-row {
-    font-size: 0.9rem;
+    font-size: var(--font-sm);
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.4rem;
@@ -315,29 +358,29 @@ h3 {
 .ticket-footer {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-md);
 }
 
 .ticket-total {
     font-weight: 700;
     text-align: right;
-    font-size: 1.1rem;
+    font-size: var(--font-lg);
     color: hsl(var(--color-text-main));
 }
 
 .ticket-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: var(--space-xs);
     justify-content: flex-end;
 }
 
 .action-btn {
-    padding: 0.5rem 0.8rem;
+    padding: var(--space-xs) var(--space-sm);
     border: 1px solid hsl(var(--color-accent));
     color: hsl(var(--color-accent));
     background: transparent;
     border-radius: 6px;
-    font-size: 0.8rem;
+    font-size: var(--font-xs);
     cursor: pointer;
     transition: all 0.2s;
     font-weight: 500;
@@ -361,9 +404,9 @@ h3 {
 }
 
 .badge {
-    padding: 0.4rem 0.8rem;
+    padding: var(--space-xs) var(--space-sm);
     border-radius: 6px;
-    font-size: 0.8rem;
+    font-size: var(--font-xs);
     font-weight: 600;
 }
 
@@ -406,11 +449,11 @@ h3 {
 
 /* MENU SECTION (Left) */
 .menu-section {
-    padding: 2rem 3rem;
+    padding: var(--space-xl) var(--space-2xl);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: var(--space-xl);
 }
 
 .top-bar {
@@ -420,12 +463,12 @@ h3 {
 }
 
 .brand h1 {
-    font-size: 2rem;
+    font-size: var(--font-3xl);
     color: hsl(var(--color-accent));
 }
 
 .subtitle {
-    font-size: 0.9rem;
+    font-size: var(--font-sm);
     color: hsl(var(--color-text-muted));
     font-weight: 500;
     letter-spacing: 0.05em;
@@ -434,11 +477,11 @@ h3 {
 
 .search-bar {
     background: white;
-    padding: 0.8rem 1.2rem;
+    padding: var(--space-sm) var(--space-md);
     border-radius: 100px;
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: var(--space-sm);
     box-shadow: var(--shadow-sm);
     width: 300px;
     transition: box-shadow 0.3s ease;
@@ -451,7 +494,7 @@ h3 {
 .search-bar input {
     border: none;
     outline: none;
-    font-size: 0.95rem;
+    font-size: var(--font-base);
     width: 100%;
     color: black;
     background: transparent;
@@ -463,7 +506,7 @@ h3 {
 
 .categories-scrubber {
     display: flex;
-    gap: 1rem;
+    gap: var(--space-md);
     overflow-x: auto;
     padding-bottom: 0.5rem;
     scrollbar-width: none;
@@ -480,13 +523,13 @@ h3 {
 .cat-pill {
     background: transparent;
     border: 1px solid hsl(var(--color-accent), 0.3);
-    padding: 0.6rem 1.5rem;
+    padding: var(--space-xs) var(--space-lg);
     border-radius: 100px;
     font-weight: 500;
     cursor: pointer;
     color: hsl(var(--color-text-muted));
     transition: all 0.2s;
-    font-size: 0.95rem;
+    font-size: var(--font-base);
 }
 
 .cat-pill:hover {
@@ -506,7 +549,7 @@ h3 {
     border: none;
     background: transparent;
     font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
+    font-size: var(--font-sm);
     color: hsl(var(--color-text-muted));
     font-weight: 500;
     cursor: pointer;
@@ -529,7 +572,7 @@ h3 {
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.5rem;
+    gap: var(--space-lg);
     padding-bottom: 2rem;
 }
 
@@ -537,14 +580,14 @@ h3 {
 .menu-item-card {
     background: hsl(var(--color-bg-sidebar));
     border-radius: var(--radius-md);
-    padding: 1.5rem;
+    padding: var(--space-lg);
     box-shadow: var(--shadow-sm);
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 1rem;
+    gap: var(--space-md);
     border: 1px solid rgba(255, 255, 255, 0.05);
     height: 100%;
 }
@@ -557,14 +600,14 @@ h3 {
 
 /* Reduced card info styles since image is gone */
 .card-info h4 {
-    font-size: 1.15rem;
+    font-size: var(--font-lg);
     margin-bottom: 0.5rem;
     font-family: 'Playfair Display', serif;
     color: hsl(var(--color-text-main));
 }
 
 .card-info p {
-    font-size: 0.9rem;
+    font-size: var(--font-sm);
     color: hsl(var(--color-text-muted));
     line-height: 1.5;
 }
@@ -602,7 +645,7 @@ h3 {
 /* SIDEBAR: ORDER (Right) */
 .order-sidebar {
     background: hsl(var(--color-bg-sidebar));
-    padding: 2rem;
+    padding: var(--space-xl);
     display: flex;
     flex-direction: column;
     border-left: 1px solid rgba(255, 255, 255, 0.05);
@@ -610,14 +653,14 @@ h3 {
 }
 
 .sidebar-header {
-    margin-bottom: 2rem;
+    margin-bottom: var(--space-xl);
     display: flex;
     justify-content: space-between;
     align-items: baseline;
 }
 
 .order-id {
-    font-size: 0.9rem;
+    font-size: var(--font-sm);
     color: hsl(var(--color-text-muted));
     font-family: monospace;
 }
@@ -627,7 +670,7 @@ h3 {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: var(--space-md);
     padding-right: 0.5rem;
     /* Space for scrollbar */
 }
@@ -654,19 +697,19 @@ h3 {
 }
 
 .item-details h4 {
-    font-size: 1rem;
+    font-size: var(--font-base);
     margin-bottom: 0.2rem;
 }
 
 .item-price-calc {
-    font-size: 0.8rem;
+    font-size: var(--font-xs);
     color: hsl(var(--color-text-muted));
 }
 
 .item-controls {
     display: flex;
     align-items: center;
-    gap: 0.8rem;
+    gap: var(--space-sm);
     background: hsl(var(--color-bg-main));
     padding: 0.3rem 0.6rem;
     border-radius: 8px;
@@ -676,7 +719,7 @@ h3 {
     border: none;
     background: none;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: var(--font-base);
     color: hsl(var(--color-text-muted));
     font-weight: bold;
 }
@@ -686,32 +729,32 @@ h3 {
 }
 
 .item-qty {
-    font-size: 0.9rem;
+    font-size: var(--font-sm);
     font-weight: 600;
     min-width: 1.2rem;
     text-align: center;
 }
 
 .billing-section {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
     border-top: 2px solid hsl(var(--color-text-muted), 0.1);
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: var(--space-sm);
 }
 
 .bill-row {
     display: flex;
     justify-content: space-between;
     color: hsl(var(--color-text-muted));
-    font-size: 0.95rem;
+    font-size: var(--font-base);
 }
 
 .bill-row.total {
     color: hsl(var(--color-text-main));
     font-weight: 700;
-    font-size: 1.4rem;
+    font-size: var(--font-xl);
     margin-top: 0.5rem;
     font-family: 'Playfair Display', serif;
 }
@@ -720,10 +763,10 @@ h3 {
     background: hsl(var(--color-text-main));
     color: hsl(var(--color-bg-sidebar));
     border: none;
-    padding: 1rem;
+    padding: var(--space-md);
     border-radius: var(--radius-md);
-    margin-top: 1rem;
-    font-size: 1rem;
+    margin-top: var(--space-md);
+    font-size: var(--font-base);
     font-weight: 600;
     cursor: pointer;
     transition: transform 0.2s, background 0.2s;
@@ -760,7 +803,7 @@ h3 {
 
 .modal-content {
     background: hsl(var(--color-bg-sidebar));
-    padding: 3rem;
+    padding: var(--space-2xl);
     border-radius: var(--radius-lg);
     text-align: center;
     max-width: 400px;
@@ -770,12 +813,12 @@ h3 {
 
 .modal-content h3 {
     color: hsl(var(--color-accent));
-    margin-bottom: 1rem;
+    margin-bottom: var(--space-md);
 }
 
 .modal-content p {
     color: hsl(var(--color-text-muted));
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-lg);
 }
 
 .modal-content strong {
@@ -793,8 +836,8 @@ h3 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
-    margin: 0 auto 1.5rem auto;
+    font-size: var(--font-3xl);
+    margin: 0 auto var(--space-lg) auto;
 }
 
 .secondary-btn {
@@ -1552,6 +1595,11 @@ h3 {
     border-top-color: hsl(var(--color-success));
 }
 
+/* If any item is preparing, header becomes orange (unless all ready) */
+.kitchen-ticket.preparing {
+    border-top-color: #ff9800;
+}
+
 @keyframes pulse-orange {
     0% {
         box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.4);
@@ -1605,9 +1653,9 @@ h3 {
 /* REVENUE VIEW STYLES */
 .revenue-dashboard {
     padding: 2rem 3rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
     padding-bottom: 3rem;
     overflow-y: auto;
     height: calc(100vh - 100px);
@@ -1636,7 +1684,15 @@ h3 {
 }
 
 .revenue-card.full-width {
-    grid-column: 1 / -1;
+    /* full-width override no longer needed in flex column, but keeping for safety if reused */
+    width: 100%;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    width: 100%;
 }
 
 /* Financial Stats Grid */
@@ -1802,7 +1858,7 @@ h3 {
         left: 0;
         flex-direction: row;
         justify-content: space-around;
-        padding: 0.5rem;
+        padding: var(--space-xs);
         background: hsl(var(--color-bg-sidebar));
         border-right: none;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -1830,7 +1886,7 @@ h3 {
     .nav-btn {
         width: auto;
         height: auto;
-        padding: 0.5rem;
+        padding: var(--space-xs);
         background: transparent !important;
     }
 
@@ -1858,14 +1914,14 @@ h3 {
     .menu-section {
         width: 100%;
         height: 100%;
-        padding: 1rem;
+        padding: var(--space-md);
     }
 
     /* Top Bar Mobile */
     .top-bar {
         flex-direction: column;
-        gap: 1rem;
-        padding-bottom: 1rem;
+        gap: var(--space-md);
+        padding-bottom: var(--space-md);
         align-items: stretch;
     }
 
@@ -1895,7 +1951,7 @@ h3 {
     }
 
     .brand-text h1 {
-        font-size: 1.5rem;
+        font-size: var(--font-2xl);
     }
 
     .search-bar {
@@ -1908,26 +1964,26 @@ h3 {
     }
 
     .cat-pill {
-        padding: 0.5rem 1rem;
+        padding: var(--space-xs) var(--space-md);
         font-size: 0.85rem;
     }
 
     /* Menu Grid Mobile */
     .menu-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 0.8rem;
+        gap: var(--space-sm);
     }
 
     .menu-item-card {
-        padding: 0.8rem;
+        padding: var(--space-sm);
     }
 
     .card-info h4 {
-        font-size: 1rem;
+        font-size: var(--font-base);
     }
 
     .card-info p {
-        font-size: 0.8rem;
+        font-size: var(--font-xs);
         display: -webkit-box;
         -webkit-line-clamp: 2;
         line-clamp: 2;
@@ -1992,6 +2048,7 @@ h3 {
         width: 100%;
     }
 }
+
 /* Variant Modal Styles */
 .variant-grid {
     display: grid;
@@ -2033,4 +2090,3 @@ h3 {
     font-size: 0.9rem;
     color: hsl(var(--color-text-muted));
 }
-
