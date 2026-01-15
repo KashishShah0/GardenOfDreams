@@ -22,7 +22,12 @@ export const POSProvider = ({ children }) => {
     const [currentOrderId, setCurrentOrderId] = useState(1);
 
     // 1. Initial Load & Polling
-    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/orders';
+    let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/orders';
+    // Fix for production where VITE_API_URL might be just the domain
+    if (!API_URL.endsWith('/api/orders')) {
+        // Remove trailing slash if present before appending
+        API_URL = API_URL.replace(/\/$/, '') + '/api/orders';
+    }
 
     const fetchOrders = async () => {
         try {
