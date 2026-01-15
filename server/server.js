@@ -18,6 +18,15 @@ mongoose.connect(process.env.MONGO_URI)
         console.error(err);
     });
 
+// Health Check
+app.get('/api/health', (req, res) => {
+    res.json({
+        status: 'ok',
+        message: 'Server is running',
+        db_connected: mongoose.connection.readyState === 1
+    });
+});
+
 // Routes
 app.use('/api/orders', require('./routes/orders'));
 
