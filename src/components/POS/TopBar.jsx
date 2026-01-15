@@ -10,7 +10,7 @@ const TopBar = () => {
                     id="table-select"
                     className="table-select"
                     value={tableNumber}
-                    onChange={(e) => setTableNumber(e.target.value)}
+                    onChange={(e) => setTableNumber(Number(e.target.value))}
                 >
                     {[...Array(12)].map((_, i) => (
                         <option key={i + 1} value={i + 1}>Table {i + 1}</option>
