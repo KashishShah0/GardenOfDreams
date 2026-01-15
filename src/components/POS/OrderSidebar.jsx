@@ -6,8 +6,8 @@ const OrderSidebar = ({ onCheckout }) => { // onCheckout prop to trigger success
     const subtotal = cart.reduce((sum, item) => sum + (item.variantPrice * item.qty), 0);
     const total = subtotal; // Tax removed as per legacy
 
-    const handleCheckout = () => {
-        const order = checkout();
+    const handleCheckout = async () => {
+        const order = await checkout();
         if (order && onCheckout) {
             onCheckout(order);
         }
