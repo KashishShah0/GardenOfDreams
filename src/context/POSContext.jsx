@@ -15,7 +15,7 @@ export const POSProvider = ({ children }) => {
 
     // Business Data
     const [cart, setCart] = useState([]);
-    const [tableNumber, setTableNumber] = useState(1);
+    const [tableNumber, setTableNumber] = useState('R1');
 
     // BACKEND DATA
     const [allOrders, setAllOrders] = useState([]);

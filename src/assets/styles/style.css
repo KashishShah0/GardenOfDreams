@@ -82,6 +82,7 @@ body {
     height: 100vh;
     overflow: hidden;
     /* App feel */
+    overscroll-behavior: none;
 }
 
 h1,
@@ -992,6 +993,12 @@ h3 {
         border-left: none;
         padding-bottom: 100px;
         overflow-y: auto;
+    }
+
+    .order-items-list {
+        overflow-y: visible;
+        flex: none;
+        height: auto;
     }
 
     /* Fix Header Layout for History */
