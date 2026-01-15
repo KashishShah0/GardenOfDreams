@@ -53,6 +53,41 @@ const RevenueView = () => {
 
     const unsoldList = sortedItems.filter(i => i.qty === 0);
 
+    // 3. Drink Ranking Logic
+    const drinkStats = {};
+
+    // Initialize with all bar menu items
+    menuItems.forEach(mi => {
+        if (getSection(mi) === 'bar') {
+            drinkStats[mi.name] = { name: mi.name, qty: 0, revenue: 0 };
+        }
+    });
+
+    // Process orders for drinks
+    allOrders.forEach(order => {
+        order.items.forEach(item => {
+            const section = getSection(item);
+            if (section === 'bar') {
+                if (!drinkStats[item.name]) {
+                    drinkStats[item.name] = { name: item.name, qty: 0, revenue: 0 };
+                }
+                drinkStats[item.name].qty += item.qty;
+                // Use variantPrice for drinks if available, else price
+                drinkStats[item.name].revenue += ((item.variantPrice || item.price) * item.qty);
+            }
+        });
+    });
+
+    const sortedDrinks = Object.values(drinkStats).sort((a, b) => b.revenue - a.revenue);
+
+    const topDrinks = sortedDrinks.slice(0, 5).filter(i => i.revenue > 0);
+    const topDrinkNames = new Set(topDrinks.map(i => i.name));
+
+    const potentialLeastDrinks = sortedDrinks.filter(i => i.revenue > 0 && !topDrinkNames.has(i.name));
+    const leastDrinks = potentialLeastDrinks.slice(-5);
+
+    const unsoldDrinks = sortedDrinks.filter(i => i.qty === 0);
+
     return (
         <div id="view-revenue" className="view-section active">
             <header className="page-header">
@@ -84,6 +119,9 @@ const RevenueView = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* --- Food Section --- */}
+                <h2 style={{ gridColumn: '1/-1', marginTop: '1rem', borderBottom: '1px solid #444', paddingBottom: '0.5rem' }}>Food Analytics</h2>
 
                 <div className="revenue-card">
                     <h3>🏆 Top Selling Dishes</h3>
@@ -123,6 +161,60 @@ const RevenueView = () => {
                     <h3>🧊 Unsold Dishes</h3>
                     <div className="ranking-list" id="unsold-list">
                         {unsoldList.length > 0 ? unsoldList.map((item, idx) => (
+                            <div key={idx} className="ranking-item">
+                                <div className="rank-info">
+                                    <span className="rank-name text-truncate" title={item.name}>{idx + 1}. {item.name}</span>
+                                    <span className="rank-meta" style={{ color: '#ef4444' }}>0 sold</span>
+                                </div>
+                                <div className="rank-stat fixed-price" style={{ color: '#888' }}>-</div>
+                            </div>
+                        )) : (
+                            <div className="empty-state" style={{ textAlign: 'center', color: '#888' }}>All items have been sold! 🎉</div>
+                        )}
+                    </div>
+                </div>
+
+                {/* --- Drink Section --- */}
+                <h2 style={{ gridColumn: '1/-1', marginTop: '2rem', borderBottom: '1px solid #444', paddingBottom: '0.5rem' }}>Drink Analytics</h2>
+
+                <div className="revenue-card">
+                    <h3>🏆 Top Selling Drinks</h3>
+                    <div className="ranking-list" id="top-selling-drinks">
+                        {topDrinks.length > 0 ? topDrinks.map((item, idx) => (
+                            <div key={idx} className="ranking-item top-rank">
+                                <div className="rank-info">
+                                    <span className="rank-name text-truncate" title={item.name}>{idx + 1}. {item.name}</span>
+                                    <span className="rank-meta">{item.qty} sold</span>
+                                </div>
+                                <div className="rank-stat fixed-price">{formatCurrency(item.revenue)}</div>
+                            </div>
+                        )) : (
+                            <div className="empty-state" style={{ textAlign: 'center', color: '#888' }}>No sales data yet</div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="revenue-card">
+                    <h3>📉 Least Sold Drinks</h3>
+                    <div className="ranking-list" id="least-selling-drinks">
+                        {leastDrinks.length > 0 ? leastDrinks.map((item, idx) => (
+                            <div key={idx} className="ranking-item low-rank">
+                                <div className="rank-info">
+                                    <span className="rank-name text-truncate" title={item.name}>{idx + 1}. {item.name}</span>
+                                    <span className="rank-meta">{item.qty} sold</span>
+                                </div>
+                                <div className="rank-stat fixed-price">{formatCurrency(item.revenue)}</div>
+                            </div>
+                        )) : (
+                            <div className="empty-state" style={{ textAlign: 'center', color: '#888' }}>No items fit criteria</div>
+                        )}
+                    </div>
+                </div>
+
+                <div className="revenue-card">
+                    <h3>🧊 Unsold Drinks</h3>
+                    <div className="ranking-list" id="unsold-drinks">
+                        {unsoldDrinks.length > 0 ? unsoldDrinks.map((item, idx) => (
                             <div key={idx} className="ranking-item">
                                 <div className="rank-info">
                                     <span className="rank-name text-truncate" title={item.name}>{idx + 1}. {item.name}</span>

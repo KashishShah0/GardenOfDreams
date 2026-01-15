@@ -65,7 +65,7 @@ const OrdersView = () => {
                                     <div key={idx} className="ticket-item-row">
                                         <span>{item.qty}x {item.name}</span>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <span>Rs. {item.price * item.qty}</span>
+                                            <span>Rs. {(item.variantPrice || item.price) * item.qty}</span>
                                             <button className="btn-delete-item" onClick={() => deleteItemFromOrder(order.id, idx)} title="Remove Item">✕</button>
                                         </div>
                                     </div>

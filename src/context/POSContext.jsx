@@ -62,7 +62,8 @@ export const POSProvider = ({ children }) => {
             ...item,
             variantName,
             variantPrice: variantPrice || item.price,
-            qty: 1
+            qty: 1,
+            status: 'pending'
         };
 
         setCart(prev => {

@@ -26,7 +26,7 @@ const BarView = () => {
         if (new Date(o.timestamp).toLocaleDateString() === todayStr) {
             o.items.forEach(i => {
                 if (getSection(i) === 'bar') {
-                    barRevenue += (i.price * i.qty);
+                    barRevenue += ((i.variantPrice || i.price) * i.qty);
                 }
             });
         }
