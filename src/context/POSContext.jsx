@@ -22,7 +22,7 @@ export const POSProvider = ({ children }) => {
     const [currentOrderId, setCurrentOrderId] = useState(1);
 
     // 1. Initial Load & Polling
-    const API_URL = 'http://localhost:5000/api/orders';
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/orders';
 
     const fetchOrders = async () => {
         try {
