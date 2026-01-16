@@ -6,10 +6,23 @@ import { io } from 'socket.io-client';
 
 const Layout = ({ children }) => {
     useEffect(() => {
-        const socket = io('http://localhost:5000');
+        // Determine Socket URL from API URL or default to localhost
+        const getSocketUrl = () => {
+            const apiUrl = import.meta.env.VITE_API_URL;
+            if (apiUrl) {
+                try {
+                    return new URL(apiUrl).origin;
+                } catch (e) {
+                    console.error('Invalid VITE_API_URL for socket:', e);
+                }
+            }
+            return 'http://localhost:5000';
+        };
+
+        const socket = io(getSocketUrl());
 
         socket.on('connect', () => {
-            console.log('Connected to socket server');
+            console.log('Connected to socket server:', getSocketUrl());
         });
 
         socket.on('new_order', (data) => {
