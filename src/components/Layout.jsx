@@ -3,6 +3,7 @@ import Sidebar from './Sidebar';
 
 import { useEffect } from 'react';
 import { io } from 'socket.io-client';
+import toast, { Toaster } from 'react-hot-toast';
 
 const Layout = ({ children }) => {
     useEffect(() => {
@@ -28,32 +29,85 @@ const Layout = ({ children }) => {
         socket.on('new_order', (data) => {
             console.log('New order received:', data);
 
-            const showNotification = () => {
-                // Check if Notification API is supported
+            // 1. Show In-App Toast (Guaranteed to work if app is open)
+            toast.success(`New Order: Table ${data.order.table || 'N/A'} - ₹${data.order.total}`, {
+                duration: 5000,
+                position: 'top-right',
+                style: {
+                    background: '#1a1a1a', // Dark theme matching likely
+                    color: '#fff',
+                    border: '1px solid #333',
+                },
+            });
+
+            // 2. Try System Notification
+            const showSystemNotification = () => {
                 if (!('Notification' in window)) return;
 
-                new Notification('New Order Received!', {
-                    body: `Table: ${data.order.table || 'N/A'} - Total: ₹${data.order.total}`,
-                });
+                try {
+                    new Notification('New Order Received!', {
+                        body: `Table: ${data.order.table || 'N/A'} - Total: ₹${data.order.total}`,
+                        icon: '/vite.svg' // Optional: Add an icon path if available
+                    });
+                } catch (e) {
+                    console.error('Notification failed:', e);
+                }
             };
 
-            // Safe permission check
             if ('Notification' in window) {
                 if (Notification.permission === 'granted') {
-                    showNotification();
+                    showSystemNotification();
                 } else if (Notification.permission !== 'denied') {
                     Notification.requestPermission().then(permission => {
                         if (permission === 'granted') {
-                            showNotification();
+                            showSystemNotification();
                         }
                     });
                 }
             }
         });
 
-        // Request permission on mount if not already granted/denied
+        // Request permission on mount logic for Mobile
+        // Browsers block requestPermission() effectively unless triggered by user interaction.
+        // We show a toast that allows the user to click to enable notifications.
         if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission();
+            toast((t) => (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span>Enable notifications for new orders?</span>
+                    <button
+                        onClick={() => {
+                            Notification.requestPermission();
+                            toast.dismiss(t.id);
+                        }}
+                        style={{
+                            padding: '4px 8px',
+                            background: '#4CAF50',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Enable
+                    </button>
+                    <button
+                        onClick={() => toast.dismiss(t.id)}
+                        style={{
+                            padding: '4px 8px',
+                            background: '#666',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Later
+                    </button>
+                </div>
+            ), {
+                duration: 10000, // Stay longer
+                position: 'bottom-center'
+            });
         }
 
         return () => {
@@ -66,6 +120,7 @@ const Layout = ({ children }) => {
         <div className="app-layout">
             <Sidebar />
             {children}
+            <Toaster />
         </div>
     );
 };
