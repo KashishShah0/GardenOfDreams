@@ -1,3 +1,4 @@
+import { useState } from 'react'; // Added useState
 import { usePOS } from './context/POSContext';
 import Layout from './components/Layout';
 import POSView from './components/POS/POSView';
@@ -6,9 +7,11 @@ import KitchenView from './components/Dashboard/KitchenView';
 import BarView from './components/Dashboard/BarView';
 import RevenueView from './components/Dashboard/RevenueView';
 import ReceiptPreview from './components/Common/ReceiptPreview';
+import Login from './components/Login'; // Import Login
 
 function App() {
   const { activeView } = usePOS();
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Global Auth State
 
   const renderView = () => {
     switch (activeView) {
@@ -20,6 +23,10 @@ function App() {
       default: return <POSView />;
     }
   };
+
+  if (!isAuthenticated) {
+    return <Login onLogin={() => setIsAuthenticated(true)} title="Site Access" password="2511" />;
+  }
 
   return (
     <Layout>

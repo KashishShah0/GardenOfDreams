@@ -1,8 +1,15 @@
+import React, { useState } from 'react';
 import { usePOS } from '../../context/POSContext';
 import { getSection, formatCurrency } from '../../utils/helpers';
+import Login from '../Login';
 
 const RevenueView = () => {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const { allOrders, menuItems } = usePOS();
+
+    if (!isAuthenticated) {
+        return <Login onLogin={() => setIsAuthenticated(true)} title="Revenue Access" password="2728" />;
+    }
 
     // 1. Calculate Aggregates
     const todayStr = new Date().toLocaleDateString();
