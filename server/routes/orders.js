@@ -16,6 +16,13 @@ router.post('/', async (req, res) => {
     try {
         const order = new Order(req.body);
         const newOrder = await order.save();
+
+        // Emit Socket Event
+        if (req.io) {
+            req.io.emit('new_order', { order: newOrder });
+            console.log('New order emitted via socket');
+        }
+
         res.status(201).json(newOrder);
     } catch (err) {
         res.status(400).json({ message: err.message });
