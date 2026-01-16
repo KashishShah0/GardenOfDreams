@@ -20,47 +20,49 @@ const OrderSidebar = ({ onCheckout }) => { // onCheckout prop to trigger success
                 <div className="order-id">Table {tableNumber} • #{currentOrderId}</div>
             </div>
 
-            <div className="order-items-list" id="order-list">
-                {cart.length === 0 ? (
-                    <div className="empty-state" style={{ textAlign: 'center', color: '#aaa', marginTop: '2rem' }}>
-                        <p>No items added yet</p>
-                    </div>
-                ) : (
-                    cart.map((orderItem, index) => {
-                        const displayName = orderItem.name + (orderItem.variantName ? ` (${orderItem.variantName})` : '');
+            <div className="sidebar-content">
+                <div className="order-items-list" id="order-list">
+                    {cart.length === 0 ? (
+                        <div className="empty-state" style={{ textAlign: 'center', color: '#aaa', marginTop: '2rem' }}>
+                            <p>No items added yet</p>
+                        </div>
+                    ) : (
+                        cart.map((orderItem, index) => {
+                            const displayName = orderItem.name + (orderItem.variantName ? ` (${orderItem.variantName})` : '');
 
-                        return (
-                            <div key={index} className="order-item">
-                                <div className="item-details">
-                                    <h4>{displayName}</h4>
-                                    <span className="item-price-calc">Rs. {orderItem.variantPrice} x {orderItem.qty}</span>
+                            return (
+                                <div key={index} className="order-item">
+                                    <div className="item-details">
+                                        <h4>{displayName}</h4>
+                                        <span className="item-price-calc">Rs. {orderItem.variantPrice} x {orderItem.qty}</span>
+                                    </div>
+                                    <div className="item-controls">
+                                        <button className="qty-btn" onClick={() => updateQty(index, -1)}>−</button>
+                                        <span className="item-qty">{orderItem.qty}</span>
+                                        <button className="qty-btn" onClick={() => updateQty(index, 1)}>+</button>
+                                    </div>
                                 </div>
-                                <div className="item-controls">
-                                    <button className="qty-btn" onClick={() => updateQty(index, -1)}>−</button>
-                                    <span className="item-qty">{orderItem.qty}</span>
-                                    <button className="qty-btn" onClick={() => updateQty(index, 1)}>+</button>
-                                </div>
-                            </div>
-                        );
-                    })
+                            );
+                        })
+                    )}
+                </div>
+
+                {cart.length > 0 && (
+                    <div className="billing-section">
+                        <div className="bill-row">
+                            <span>Subtotal</span>
+                            <span id="subtotal-price">Rs. {subtotal.toLocaleString()}</span>
+                        </div>
+                        <div className="bill-row total">
+                            <span>Total</span>
+                            <span id="total-price">Rs. {total.toLocaleString()}</span>
+                        </div>
+                        <button className="checkout-btn" onClick={handleCheckout}>
+                            <span>Place Order</span>
+                        </button>
+                    </div>
                 )}
             </div>
-
-            {cart.length > 0 && (
-                <div className="billing-section">
-                    <div className="bill-row">
-                        <span>Subtotal</span>
-                        <span id="subtotal-price">Rs. {subtotal.toLocaleString()}</span>
-                    </div>
-                    <div className="bill-row total">
-                        <span>Total</span>
-                        <span id="total-price">Rs. {total.toLocaleString()}</span>
-                    </div>
-                    <button className="checkout-btn" onClick={handleCheckout}>
-                        <span>Place Order</span>
-                    </button>
-                </div>
-            )}
         </aside>
     );
 };

@@ -688,6 +688,22 @@ h3 {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    height: 100vh;
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    /* Ensure only list scrolls by default */
+}
+
+.order-items-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
     gap: var(--space-md);
     padding-right: 0.5rem;
     /* Space for scrollbar */
@@ -2259,11 +2275,27 @@ h3 {
     }
 
     /* Fix Scroll inside sidebar */
-    .order-sidebar .order-items-list {
+    .order-sidebar {
+        padding-bottom: 90px;
+    }
+
+    .order-sidebar .sidebar-content {
         flex: 1;
         overflow-y: auto;
         min-height: 0;
-        /* Crucial for flex nested scroll */
+        display: block;
+        /* Let flow naturally */
+    }
+
+    .order-sidebar .order-items-list {
+        flex: none;
+        overflow: visible;
+        height: auto;
+    }
+
+    .order-sidebar .billing-section {
+        margin-top: 1rem;
+        /* Ensure spacing */
     }
 
     .nav-btn.mobile-only {
