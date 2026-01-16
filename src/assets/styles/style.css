@@ -2276,8 +2276,10 @@ h3 {
 
     /* Fix Scroll inside sidebar */
     .order-sidebar {
-        padding-bottom: 90px;
-        /* Keep space for bottom nav */
+        height: 100dvh;
+        /* Dynamic height for mobile browsers */
+        padding-bottom: 0;
+        /* Remove container padding */
     }
 
     .order-sidebar .sidebar-content {
@@ -2285,7 +2287,8 @@ h3 {
         overflow-y: auto;
         min-height: 0;
         display: block;
-        /* Let flow naturally */
+        padding-bottom: 20px;
+        /* Small safe area */
     }
 
     .order-sidebar .order-items-list {
@@ -2298,7 +2301,8 @@ h3 {
     .order-sidebar .billing-section {
         margin-top: 1rem;
         padding-top: 1rem;
-        /* Natural flow */
+        padding-bottom: 150px;
+        /* HUGE buffer to scroll button up */
     }
 
     .nav-btn.mobile-only {
