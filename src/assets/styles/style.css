@@ -2277,25 +2277,30 @@ h3 {
     /* Fix Scroll inside sidebar */
     .order-sidebar {
         padding-bottom: 90px;
+        /* Keep space for bottom nav */
     }
 
     .order-sidebar .sidebar-content {
         flex: 1;
-        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
         min-height: 0;
-        display: block;
-        /* Let flow naturally */
     }
 
     .order-sidebar .order-items-list {
-        flex: none;
-        overflow: visible;
-        height: auto;
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
+        /* Scroll ONLY the list */
     }
 
     .order-sidebar .billing-section {
-        margin-top: 1rem;
-        /* Ensure spacing */
+        margin-top: auto;
+        flex-shrink: 0;
+        padding-top: 1rem;
+        background: transparent;
+        /* Ensure it sits at bottom */
     }
 
     .nav-btn.mobile-only {
