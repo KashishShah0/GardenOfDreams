@@ -2237,21 +2237,33 @@ h3 {
         top: 0;
         right: -100%;
         width: 100%;
-        height: calc(100vh - 75px);
-        /* Stop above nav */
+        height: 100vh;
+        /* Full height, we'll pad the bottom */
         z-index: 900;
         transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         padding: 1rem;
+        padding-bottom: 90px;
+        /* Clear the bottom nav */
         background: rgba(30, 13, 45, 0.95);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border-left: none;
+        display: flex;
+        flex-direction: column;
     }
 
     /* Toggle Class State */
     .pos-layout.show-mobile-cart .order-sidebar {
         right: 0;
         box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Fix Scroll inside sidebar */
+    .order-sidebar .order-items-list {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 0;
+        /* Crucial for flex nested scroll */
     }
 
     .nav-btn.mobile-only {
