@@ -29,24 +29,30 @@ const Layout = ({ children }) => {
             console.log('New order received:', data);
 
             const showNotification = () => {
+                // Check if Notification API is supported
+                if (!('Notification' in window)) return;
+
                 new Notification('New Order Received!', {
                     body: `Table: ${data.order.table || 'N/A'} - Total: ₹${data.order.total}`,
                 });
             };
 
-            if (Notification.permission === 'granted') {
-                showNotification();
-            } else if (Notification.permission !== 'denied') {
-                Notification.requestPermission().then(permission => {
-                    if (permission === 'granted') {
-                        showNotification();
-                    }
-                });
+            // Safe permission check
+            if ('Notification' in window) {
+                if (Notification.permission === 'granted') {
+                    showNotification();
+                } else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            showNotification();
+                        }
+                    });
+                }
             }
         });
 
         // Request permission on mount if not already granted/denied
-        if (Notification.permission === 'default') {
+        if ('Notification' in window && Notification.permission === 'default') {
             Notification.requestPermission();
         }
 
