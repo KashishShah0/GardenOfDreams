@@ -29,6 +29,13 @@ const Layout = ({ children }) => {
         socket.on('new_order', (data) => {
             console.log('New order received:', data);
 
+            // Play notification sound
+            const playNotificationSound = () => {
+                const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                audio.play().catch(e => console.error('Audio play failed:', e));
+            };
+            playNotificationSound();
+
             // 1. Show In-App Toast (Guaranteed to work if app is open)
             toast.success(`New Order: Table ${data.order.table || 'N/A'} - ₹${data.order.total}`, {
                 duration: 5000,
