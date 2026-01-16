@@ -2282,25 +2282,23 @@ h3 {
 
     .order-sidebar .sidebar-content {
         flex: 1;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
+        overflow-y: auto;
         min-height: 0;
+        display: block;
+        /* Let flow naturally */
     }
 
     .order-sidebar .order-items-list {
-        flex: 1;
-        overflow-y: auto;
-        min-height: 0;
-        /* Scroll ONLY the list */
+        flex: none;
+        overflow: visible;
+        height: auto;
+        /* Expand to fit content */
     }
 
     .order-sidebar .billing-section {
-        margin-top: auto;
-        flex-shrink: 0;
+        margin-top: 1rem;
         padding-top: 1rem;
-        background: transparent;
-        /* Ensure it sits at bottom */
+        /* Natural flow */
     }
 
     .nav-btn.mobile-only {
