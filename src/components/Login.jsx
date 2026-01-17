@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import '../assets/styles/style.css'; // Ensure we have the styles
 
-const Login = ({ onLogin, title, password }) => {
+const Login = ({ onLogin, title, password, onCancel }) => {
     const [input, setInput] = useState('');
     const [error, setError] = useState(false);
 
@@ -72,20 +72,43 @@ const Login = ({ onLogin, title, password }) => {
                         {error && <span style={{ color: '#ef4444', fontSize: '0.8rem', marginTop: '0.5rem', display: 'block' }}>Incorrect Password</span>}
                     </div>
 
-                    <button type="submit" style={{
-                        padding: '1rem',
-                        borderRadius: 'var(--radius-md)',
-                        border: 'none',
-                        background: 'hsl(var(--color-accent))',
-                        color: 'hsl(var(--color-bg-sidebar))',
-                        fontSize: '1rem',
-                        fontWeight: 'bold',
-                        cursor: 'pointer',
-                        transition: 'transform 0.2s',
-                        boxShadow: '0 0 15px rgba(221, 170, 68, 0.3)'
-                    }}>
-                        Unlock Access
-                    </button>
+                    <div style={{ display: 'flex', gap: '1rem' }}>
+                        {onCancel && (
+                            <button
+                                type="button"
+                                onClick={onCancel}
+                                style={{
+                                    flex: 1,
+                                    padding: '1rem',
+                                    borderRadius: 'var(--radius-md)',
+                                    border: '1px solid rgba(255,255,255,0.2)',
+                                    background: 'transparent',
+                                    color: 'hsl(var(--color-text-dim))',
+                                    fontSize: '1rem',
+                                    fontWeight: 'bold',
+                                    cursor: 'pointer',
+                                    transition: 'background 0.2s',
+                                }}
+                            >
+                                Go Back
+                            </button>
+                        )}
+                        <button type="submit" style={{
+                            flex: 1,
+                            padding: '1rem',
+                            borderRadius: 'var(--radius-md)',
+                            border: 'none',
+                            background: 'hsl(var(--color-accent))',
+                            color: 'hsl(var(--color-bg-sidebar))',
+                            fontSize: '1rem',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            transition: 'transform 0.2s',
+                            boxShadow: '0 0 15px rgba(221, 170, 68, 0.3)'
+                        }}>
+                            Unlock
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>

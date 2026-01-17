@@ -5,10 +5,17 @@ import Login from '../Login';
 
 const RevenueView = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const { allOrders, menuItems } = usePOS();
+    const { allOrders, menuItems, setActiveView } = usePOS();
 
     if (!isAuthenticated) {
-        return <Login onLogin={() => setIsAuthenticated(true)} title="Revenue Access" password="2728" />;
+        return (
+            <Login
+                onLogin={() => setIsAuthenticated(true)}
+                title="Revenue Access"
+                password="2728"
+                onCancel={() => setActiveView('pos')}
+            />
+        );
     }
 
     // 1. Calculate Aggregates

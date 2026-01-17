@@ -74,6 +74,47 @@ const Layout = ({ children }) => {
             }
         });
 
+        socket.on('item_ready', (data) => {
+            console.log('Item ready received:', data);
+
+            // Play notification sound
+            const playNotificationSound = () => {
+                const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                audio.play().catch(e => console.error('Audio play failed:', e));
+            };
+            playNotificationSound();
+
+            // 1. Show In-App Toast
+            toast.success(`Item Ready: ${data.item.name} (Table ${data.table || 'N/A'})`, {
+                duration: 5000,
+                position: 'top-right',
+                style: {
+                    background: '#1a1a1a',
+                    color: '#fff',
+                    border: '1px solid #333',
+                },
+                icon: '🍽️',
+            });
+
+            // 2. Try System Notification
+            const showSystemNotification = () => {
+                if (!('Notification' in window)) return;
+
+                try {
+                    new Notification('Item Ready!', {
+                        body: `${data.item.name} is ready for Table ${data.table || 'N/A'}`,
+                        icon: '/vite.svg'
+                    });
+                } catch (e) {
+                    console.error('Notification failed:', e);
+                }
+            };
+
+            if ('Notification' in window && Notification.permission === 'granted') {
+                showSystemNotification();
+            }
+        });
+
         // Request permission on mount logic for Mobile
         // Browsers block requestPermission() effectively unless triggered by user interaction.
         // We show a toast that allows the user to click to enable notifications.

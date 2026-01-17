@@ -36,12 +36,36 @@ router.put('/:id', async (req, res) => {
         const order = await Order.findOne({ id: req.params.id });
         if (!order) return res.status(404).json({ message: 'Order not found' });
 
+        // Logic to detect if a specific item became "ready"
+        if (req.body.items && req.io) {
+            const oldItems = order.items;
+            const newItems = req.body.items;
+
+            newItems.forEach((newItem, index) => {
+                const oldItem = oldItems[index]; // Assuming index preserves order which it should
+                if (oldItem && oldItem.status !== 'ready' && newItem.status === 'ready') {
+                    req.io.emit('item_ready', {
+                        orderId: order.id,
+                        table: order.table,
+                        item: newItem
+                    });
+                    console.log(`Item ready event emitted: Order ${order.id}, Item ${newItem.name}`);
+                }
+            });
+        }
+
         if (req.body.served !== undefined) order.served = req.body.served;
         if (req.body.paid !== undefined) order.paid = req.body.paid;
         if (req.body.items !== undefined) order.items = req.body.items;
         if (req.body.total !== undefined) order.total = req.body.total;
 
         const updatedOrder = await order.save();
+
+        // Emit general update
+        if (req.io) {
+            req.io.emit('order_updated', { order: updatedOrder });
+        }
+
         res.json(updatedOrder);
     } catch (err) {
         res.status(400).json({ message: err.message });
