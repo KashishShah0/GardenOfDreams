@@ -183,6 +183,30 @@ export const POSProvider = ({ children }) => {
         }
     };
 
+    const markItemsServed = async (orderId, itemIndices) => {
+        const order = allOrders.find(o => o.id === orderId);
+        if (!order) return;
+
+        const updatedItems = [...order.items];
+        itemIndices.forEach(index => {
+            updatedItems[index] = { ...updatedItems[index], status: 'served' };
+        });
+
+        // Check if ALL items are now served
+        const allServed = updatedItems.every(i => i.status === 'served');
+
+        try {
+            await fetch(`${API_URL}/${orderId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: updatedItems, served: allServed })
+            });
+            fetchOrders();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const toggleItemStatus = async (orderId, itemIndex) => {
         const order = allOrders.find(o => o.id === orderId);
         if (!order) return;
@@ -193,11 +217,14 @@ export const POSProvider = ({ children }) => {
 
         updatedItems[itemIndex] = { ...updatedItems[itemIndex], status: nextStatus };
 
+        // Check if ALL items are served (only if we just toggled to served, but good to check always)
+        const allServed = updatedItems.every(i => i.status === 'served');
+
         try {
             await fetch(`${API_URL}/${orderId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ items: updatedItems })
+                body: JSON.stringify({ items: updatedItems, served: allServed })
             });
             fetchOrders();
         } catch (err) {
@@ -237,6 +264,7 @@ export const POSProvider = ({ children }) => {
         deleteOrder,
         deleteItemFromOrder,
         toggleItemStatus,
+        markItemsServed,
         resetSystem
     };
 

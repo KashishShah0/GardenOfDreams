@@ -7,13 +7,17 @@ const BarView = () => {
 
     // Filter Logic
     const activeOrders = allOrders
-        .filter(o => !o.served)
         .map(order => {
             const barItems = order.items
                 .map((item, index) => ({ item, originalIndex: index }))
                 .filter(({ item }) => getSection(item) === 'bar');
 
             if (barItems.length === 0) return null;
+
+            // Only show if there are unserved items in this section
+            const hasUnservedItems = barItems.some(({ item }) => item.status !== 'served');
+            if (!hasUnservedItems) return null;
+
             return { ...order, barItems };
         })
         .filter(Boolean)

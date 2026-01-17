@@ -7,13 +7,17 @@ const KitchenView = () => {
 
     // Filter Logic
     const activeOrders = allOrders
-        .filter(o => !o.served)
         .map(order => {
             const kitchenItems = order.items
                 .map((item, index) => ({ item, originalIndex: index }))
                 .filter(({ item }) => getSection(item) === 'kitchen');
 
             if (kitchenItems.length === 0) return null;
+
+            // Only show if there are unserved items in this section
+            const hasUnservedItems = kitchenItems.some(({ item }) => item.status !== 'served');
+            if (!hasUnservedItems) return null;
+
             return { ...order, kitchenItems };
         })
         .filter(Boolean)

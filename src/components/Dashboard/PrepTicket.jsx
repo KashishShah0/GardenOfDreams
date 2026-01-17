@@ -1,7 +1,7 @@
 import { usePOS } from '../../context/POSContext';
 
 const PrepTicket = ({ order, relevantItems, viewContext }) => {
-    const { toggleItemStatus, toggleServed } = usePOS();
+    const { toggleItemStatus, markItemsServed } = usePOS();
 
     // Check if all relevant items are ready
     const allReady = relevantItems.every(({ item }) => item.status === 'ready');
@@ -46,7 +46,10 @@ const PrepTicket = ({ order, relevantItems, viewContext }) => {
             </div>
             <div className="ticket-footer">
                 <div className="ticket-actions">
-                    <button className="action-btn" onClick={() => toggleServed(order.id)}>Mark Served</button>
+                    <button className="action-btn" onClick={() => {
+                        const indices = relevantItems.map(i => i.originalIndex);
+                        markItemsServed(order.id, indices);
+                    }}>Mark Served</button>
                 </div>
             </div>
         </div>
