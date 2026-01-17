@@ -27,7 +27,7 @@ const PrepTicket = ({ order, relevantItems, viewContext }) => {
             </div>
             <div className="ticket-items">
                 {relevantItems.map(({ item, originalIndex }) => (
-                    <div key={originalIndex} className="kitchen-item-row">
+                    <div key={originalIndex} className={`kitchen-item-row ${item.status === 'served' ? 'served' : ''}`}>
                         <div className="k-item-name">
                             <span className="k-item-qty">{item.qty}</span>
                             <span>{item.name}</span>

@@ -189,7 +189,7 @@ export const POSProvider = ({ children }) => {
 
         const updatedItems = [...order.items];
         const currentStatus = updatedItems[itemIndex].status || 'pending';
-        const nextStatus = currentStatus === 'pending' ? 'preparing' : (currentStatus === 'preparing' ? 'ready' : 'pending');
+        const nextStatus = currentStatus === 'pending' ? 'preparing' : (currentStatus === 'preparing' ? 'ready' : (currentStatus === 'ready' ? 'served' : 'pending'));
 
         updatedItems[itemIndex] = { ...updatedItems[itemIndex], status: nextStatus };
 

@@ -806,6 +806,22 @@ h3 {
     transition: transform 0.2s, background 0.2s;
 }
 
+/* Served status for kitchen/bar items */
+.kitchen-item-row.served {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.kitchen-item-row.served .status-toggle {
+    text-decoration: none;
+    /* Keep button text normal */
+    opacity: 1;
+    /* Keep button visible */
+    background: transparent;
+    border-color: hsl(var(--color-text-muted), 0.5);
+    color: hsl(var(--color-text-muted));
+}
+
 .checkout-btn:hover {
     transform: scale(1.02);
     background: hsl(0, 0%, 15%);
