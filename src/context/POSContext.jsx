@@ -139,15 +139,21 @@ export const POSProvider = ({ children }) => {
         }
     };
 
-    const togglePaid = async (orderId) => {
+    const togglePaid = async (orderId, paymentDetails = null) => {
         try {
             const order = allOrders.find(o => o.id === orderId);
             if (!order) return;
 
+            const newPaidStatus = paymentDetails ? true : !order.paid;
+            const newPaymentDetails = paymentDetails || { cash: 0, online: 0 }; // Reset if unmarking or default
+
             await fetch(`${API_URL}/${orderId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ paid: !order.paid })
+                body: JSON.stringify({
+                    paid: newPaidStatus,
+                    paymentDetails: newPaymentDetails
+                })
             });
             fetchOrders();
         } catch (err) {
@@ -280,7 +286,7 @@ export const POSProvider = ({ children }) => {
         tableNumber,
         setTableNumber,
         toggleServed,
-        togglePaid,
+        togglePaid: (id, details) => togglePaid(id, details),
         deleteOrder,
         deleteItemFromOrder,
         toggleItemStatus,

@@ -8,7 +8,11 @@ const OrderSchema = new mongoose.Schema({
     timestamp: { type: Date, default: Date.now },
     served: { type: Boolean, default: false },
     paid: { type: Boolean, default: false },
-    discount: { type: Number, default: 0 }
+    discount: { type: Number, default: 0 },
+    paymentDetails: {
+        cash: { type: Number, default: 0 },
+        online: { type: Number, default: 0 }
+    }
 });
 
 module.exports = mongoose.model('Order', OrderSchema);

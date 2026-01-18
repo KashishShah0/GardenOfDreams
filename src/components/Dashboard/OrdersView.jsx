@@ -7,6 +7,27 @@ const OrdersView = () => {
     const { allOrders, resetSystem, toggleServed, togglePaid, deleteOrder, deleteItemFromOrder, applyDiscount } = usePOS();
     const [printerConnected, setPrinterConnected] = useState(false);
 
+    // Payment Modal State
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [selectedOrderId, setSelectedOrderId] = useState(null);
+    const [paymentAmounts, setPaymentAmounts] = useState({ cash: '', online: '' });
+
+    const openPaymentModal = (orderId, total) => {
+        setSelectedOrderId(orderId);
+        setPaymentAmounts({ cash: '', online: total }); // Default full amount to online
+        setShowPaymentModal(true);
+    };
+
+    const handlePaymentSubmit = () => {
+        if (selectedOrderId) {
+            const finalCash = parseFloat(paymentAmounts.cash) || 0;
+            const finalOnline = parseFloat(paymentAmounts.online) || 0;
+            togglePaid(selectedOrderId, { cash: finalCash, online: finalOnline });
+            setShowPaymentModal(false);
+            setSelectedOrderId(null);
+        }
+    };
+
     const handleDiscount = (orderId, currentDiscount) => {
         const discount = prompt('Enter discount amount:', currentDiscount || 0);
         if (discount !== null) {
@@ -19,16 +40,15 @@ const OrdersView = () => {
             if (!order.served && !order.paid) return 0;
             if (order.served && !order.paid) return 1;
             if (order.served && order.paid) return 2;
-            return 3; // Wildcard case (e.g. paid but not served)
+            return 3;
         };
 
         const diff = getPriority(a) - getPriority(b);
         if (diff !== 0) return diff;
 
-        return new Date(b.timestamp) - new Date(a.timestamp); // Newest first
+        return new Date(b.timestamp) - new Date(a.timestamp);
     });
 
-    // Stats
     const todayStr = new Date().toLocaleDateString();
     const todaysRevenue = allOrders
         .filter(o => new Date(o.timestamp).toLocaleDateString() === todayStr)
@@ -41,9 +61,39 @@ const OrdersView = () => {
 
     return (
         <div id="view-orders" className="view-section active">
+            {/* Payment Modal */}
+            {showPaymentModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h3>Split Payment (Order #{selectedOrderId})</h3>
+                        <div className="form-group">
+                            <label>Cash Amount</label>
+                            <input
+                                type="number"
+                                value={paymentAmounts.cash}
+                                onChange={(e) => setPaymentAmounts({ ...paymentAmounts, cash: e.target.value })}
+                                placeholder="0"
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Online Amount</label>
+                            <input
+                                type="number"
+                                value={paymentAmounts.online}
+                                onChange={(e) => setPaymentAmounts({ ...paymentAmounts, online: e.target.value })}
+                                placeholder="0"
+                            />
+                        </div>
+                        <div className="modal-actions">
+                            <button className="btn-secondary" onClick={() => setShowPaymentModal(false)}>Cancel</button>
+                            <button className="btn-primary" onClick={handlePaymentSubmit}>Confirm Payment</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <header className="page-header">
                 <div>
-                    {/* Header removed */}
                     <div className="header-actions-row">
                         <button className="reset-link" onClick={resetSystem}>Reset Day / Clear All</button>
                         <span className="divider">•</span>
@@ -80,15 +130,25 @@ const OrdersView = () => {
                                 </div>
                             </div>
                             <div className="ticket-items">
-                                {order.items.map((item, idx) => (
-                                    <div key={idx} className="ticket-item-row">
-                                        <span>{item.qty}x {item.name}</span>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <span>Rs. {(item.variantPrice || item.price) * item.qty}</span>
-                                            <button className="btn-delete-item" onClick={() => deleteItemFromOrder(order.id, idx)} title="Remove Item">✕</button>
+                                {order.paid ? (
+                                    <div className="payment-details-summary">
+                                        <div style={{ color: '#2ecc71', fontWeight: 'bold', marginBottom: '0.5rem' }}>✓ Payment Complete</div>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9rem' }}>
+                                            <span>Cash: {formatCurrency(order.paymentDetails?.cash || 0)}</span>
+                                            <span>Online: {formatCurrency(order.paymentDetails?.online || 0)}</span>
                                         </div>
                                     </div>
-                                ))}
+                                ) : (
+                                    order.items.map((item, idx) => (
+                                        <div key={idx} className="ticket-item-row">
+                                            <span>{item.qty}x {item.name}</span>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <span>Rs. {(item.variantPrice || item.price) * item.qty}</span>
+                                                <button className="btn-delete-item" onClick={() => deleteItemFromOrder(order.id, idx)} title="Remove Item">✕</button>
+                                            </div>
+                                        </div>
+                                    ))
+                                )}
                             </div>
                             <div className="ticket-footer">
                                 <div className="ticket-total">
@@ -119,7 +179,7 @@ const OrdersView = () => {
                                             <button className="undo-btn" onClick={() => togglePaid(order.id)} title="Undo Paid">↺</button>
                                         </>
                                     ) : (
-                                        <button className="action-btn btn-primary" onClick={() => togglePaid(order.id)}>Mark Paid</button>
+                                        <button className="action-btn btn-primary" onClick={() => openPaymentModal(order.id, order.total)}>Mark Paid</button>
                                     )}
                                 </div>
                             </div>

@@ -59,6 +59,7 @@ router.put('/:id', async (req, res) => {
         if (req.body.items !== undefined) order.items = req.body.items;
         if (req.body.total !== undefined) order.total = req.body.total;
         if (req.body.discount !== undefined) order.discount = req.body.discount;
+        if (req.body.paymentDetails !== undefined) order.paymentDetails = req.body.paymentDetails;
 
         const updatedOrder = await order.save();
 
