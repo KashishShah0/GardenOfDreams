@@ -4,8 +4,15 @@ import { connectPrinter, printBill } from '../../utils/printer';
 import { formatCurrency } from '../../utils/helpers';
 
 const OrdersView = () => {
-    const { allOrders, resetSystem, toggleServed, togglePaid, deleteOrder, deleteItemFromOrder } = usePOS();
+    const { allOrders, resetSystem, toggleServed, togglePaid, deleteOrder, deleteItemFromOrder, applyDiscount } = usePOS();
     const [printerConnected, setPrinterConnected] = useState(false);
+
+    const handleDiscount = (orderId, currentDiscount) => {
+        const discount = prompt('Enter discount amount:', currentDiscount || 0);
+        if (discount !== null) {
+            applyDiscount(orderId, parseFloat(discount) || 0);
+        }
+    };
 
     const sortedOrders = [...allOrders].sort((a, b) => {
         const getPriority = (order) => {
@@ -85,10 +92,16 @@ const OrdersView = () => {
                             </div>
                             <div className="ticket-footer">
                                 <div className="ticket-total">
+                                    {order.discount > 0 && (
+                                        <div style={{ fontSize: '0.9rem', color: '#e74c3c' }}>
+                                            Discount: -{formatCurrency(order.discount)}
+                                        </div>
+                                    )}
                                     Total: {formatCurrency(order.total)}
                                 </div>
                                 <div className="ticket-actions">
                                     <button className="btn-delete-order" onClick={() => { if (confirm('Delete order?')) deleteOrder(order.id) }} title="Delete Order">🗑️</button>
+                                    <button className="action-btn" onClick={() => handleDiscount(order.id, order.discount)} title="Apply Discount">Discount</button>
                                     <button className="action-btn" onClick={() => printBill(order)} title="Print Receipt">🖨</button>
 
                                     {order.served ? (

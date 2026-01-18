@@ -232,6 +232,26 @@ export const POSProvider = ({ children }) => {
         }
     };
 
+    const applyDiscount = async (orderId, discountAmount) => {
+        const order = allOrders.find(o => o.id === orderId);
+        if (!order) return;
+
+        // Calculate original total from items to ensure accuracy
+        const itemsTotal = order.items.reduce((sum, i) => sum + (i.variantPrice || i.price) * i.qty, 0);
+        const newTotal = itemsTotal - discountAmount;
+
+        try {
+            await fetch(`${API_URL}/${orderId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ discount: discountAmount, total: newTotal < 0 ? 0 : newTotal })
+            });
+            fetchOrders();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const resetSystem = async () => {
         if (!confirm('Are you sure you want to delete ALL history?')) return;
         try {
@@ -265,6 +285,7 @@ export const POSProvider = ({ children }) => {
         deleteItemFromOrder,
         toggleItemStatus,
         markItemsServed,
+        applyDiscount,
         resetSystem
     };
 

@@ -7,7 +7,8 @@ const OrderSchema = new mongoose.Schema({
     total: { type: Number, required: true },
     timestamp: { type: Date, default: Date.now },
     served: { type: Boolean, default: false },
-    paid: { type: Boolean, default: false }
+    paid: { type: Boolean, default: false },
+    discount: { type: Number, default: 0 }
 });
 
 module.exports = mongoose.model('Order', OrderSchema);
