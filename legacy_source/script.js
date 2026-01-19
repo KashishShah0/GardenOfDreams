@@ -145,6 +145,12 @@ const menuItems = [
         price: 80,
     },
     {
+        id: 38,
+        name: "Water Bottle",
+        category: "Others",
+        price: 20,
+    },
+    {
         id: 26,
         name: "Masala Omelette",
         category: "Others",

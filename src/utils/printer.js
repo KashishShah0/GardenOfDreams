@@ -111,8 +111,8 @@ async function printViaBluetooth(order) {
     data += CMDS.TEXT_FMT_BOLD;
     data += "GARDEN OF DREAMS" + CTL_LF;
     data += CMDS.TEXT_FMT;
-    data += "Thamel, Kathmandu" + CTL_LF;
-    data += "Tel: +977-1-4700000" + CTL_LF;
+    data += "Birgunj, Nepal" + CTL_LF;
+    data += "Tel: 9851232511" + CTL_LF;
     data += CTL_LF;
     data += "RECEIPT" + CTL_LF;
     data += "--------------------------------" + CTL_LF;
@@ -152,7 +152,12 @@ async function printViaBluetooth(order) {
 
     try {
         const buffer = encoder.encode(data);
-        await printerCharacteristic.writeValue(buffer);
+        const MAX_CHUNK_SIZE = 500; // Value can't exceed 512 bytes
+
+        for (let i = 0; i < buffer.length; i += MAX_CHUNK_SIZE) {
+            const chunk = buffer.slice(i, i + MAX_CHUNK_SIZE);
+            await printerCharacteristic.writeValue(chunk);
+        }
     } catch (e) {
         alert('Print failed: ' + e);
     }
