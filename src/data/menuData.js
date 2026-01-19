@@ -217,10 +217,16 @@ export const menuItems = [
         price: 25,
     },
     {
+        id: 38,
+        name: "Water Bottle",
+        category: "Others",
+        price: 20,
+    },
+    {
         id: 101,
         name: "Red Label",
         category: "Whisky",
-        price: 0, 
+        price: 0,
         variants: [
             { name: "30ml", price: 300 },
             { name: "60ml", price: 580 },
