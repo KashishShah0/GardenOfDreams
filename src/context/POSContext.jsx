@@ -258,6 +258,48 @@ export const POSProvider = ({ children }) => {
         }
     };
 
+    const addItemToOrder = async (orderId, itemId, variantName = null, variantPrice = null) => {
+        const order = allOrders.find(o => o.id === orderId);
+        if (!order) return;
+
+        const itemData = menuItems.find(i => i.id === itemId);
+        if (!itemData) return;
+
+        const newItem = {
+            ...itemData,
+            variantName,
+            variantPrice: variantPrice || itemData.price,
+            qty: 1,
+            status: 'pending'
+        };
+
+        // Check if item already exists in order (same id and variant)
+        const existingItemIndex = order.items.findIndex(i => i.id === itemId && i.variantName === variantName);
+        let updatedItems = [...order.items];
+
+        if (existingItemIndex >= 0) {
+            updatedItems[existingItemIndex] = {
+                ...updatedItems[existingItemIndex],
+                qty: updatedItems[existingItemIndex].qty + 1
+            };
+        } else {
+            updatedItems.push(newItem);
+        }
+
+        const newTotal = updatedItems.reduce((sum, i) => sum + (i.variantPrice || i.price) * i.qty, 0);
+
+        try {
+            await fetch(`${API_URL}/${orderId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ items: updatedItems, total: newTotal })
+            });
+            fetchOrders();
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     const resetSystem = async () => {
         if (!confirm('Are you sure you want to delete ALL history?')) return;
         try {
@@ -292,6 +334,7 @@ export const POSProvider = ({ children }) => {
         toggleItemStatus,
         markItemsServed,
         applyDiscount,
+        addItemToOrder,
         resetSystem
     };
 

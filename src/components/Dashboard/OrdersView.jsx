@@ -3,6 +3,8 @@ import { usePOS } from '../../context/POSContext';
 import { connectPrinter, printBill } from '../../utils/printer';
 import { formatCurrency } from '../../utils/helpers';
 
+import AddItemModal from './AddItemModal';
+
 const OrdersView = () => {
     const { allOrders, resetSystem, toggleServed, togglePaid, deleteOrder, deleteItemFromOrder, applyDiscount } = usePOS();
     const [printerConnected, setPrinterConnected] = useState(false);
@@ -11,6 +13,9 @@ const OrdersView = () => {
     const [showPaymentModal, setShowPaymentModal] = useState(false);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [paymentAmounts, setPaymentAmounts] = useState({ cash: '', online: '' });
+
+    // Add Item State
+    const [addingItemOrder, setAddingItemOrder] = useState(null);
 
     const openPaymentModal = (orderId, total) => {
         setSelectedOrderId(orderId);
@@ -92,6 +97,14 @@ const OrdersView = () => {
                 </div>
             )}
 
+            {/* Add Item Modal */}
+            {addingItemOrder && (
+                <AddItemModal
+                    order={addingItemOrder}
+                    onClose={() => setAddingItemOrder(null)}
+                />
+            )}
+
             <header className="page-header">
                 <div>
                     <div className="header-actions-row">
@@ -120,13 +133,26 @@ const OrdersView = () => {
                         <div key={order.id} className={`order-ticket ${order.paid ? 'status-paid' : ''} ${order.served ? 'status-served' : ''}`}>
                             <div className="ticket-header">
                                 <div>
-                                    <span className="ticket-id">#{order.id} • Table {order.table}</span>
+                                    <span className="ticket-id">
+                                        #{order.id} • Table {order.table}
+                                    </span>
                                     <div className="ticket-time">
                                         {new Date(order.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </div>
                                 </div>
-                                <div className="ticket-status-icons">
-                                    {order.served && '🍽️'} {order.paid && '💰'}
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    {!order.paid && (
+                                        <button
+                                            className="btn-primary"
+                                            style={{ padding: '4px 12px', fontSize: '0.9rem' }}
+                                            onClick={() => setAddingItemOrder(order)}
+                                        >
+                                            Add Item
+                                        </button>
+                                    )}
+                                    <div className="ticket-status-icons">
+                                        {order.served && '🍽️'} {order.paid && '💰'}
+                                    </div>
                                 </div>
                             </div>
                             <div className="ticket-items">

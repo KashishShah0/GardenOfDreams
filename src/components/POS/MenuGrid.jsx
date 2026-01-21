@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { usePOS } from '../../context/POSContext';
 import ConfirmationModal from '../Modals/ConfirmationModal';
 
-const MenuGrid = ({ onVariantSelect }) => {
+const MenuGrid = ({ onVariantSelect, onItemSelect }) => {
     const { menuItems, activeCategory, searchQuery, addToCart } = usePOS();
     const [confirmationData, setConfirmationData] = useState({ isOpen: false, item: null });
 
@@ -33,7 +33,11 @@ const MenuGrid = ({ onVariantSelect }) => {
 
     const confirmAddToCart = () => {
         if (confirmationData.item) {
-            addToCart(confirmationData.item.id);
+            if (onItemSelect) {
+                onItemSelect(confirmationData.item);
+            } else {
+                addToCart(confirmationData.item.id);
+            }
         }
         setConfirmationData({ isOpen: false, item: null });
     };
@@ -71,8 +75,8 @@ const MenuGrid = ({ onVariantSelect }) => {
                 isOpen={confirmationData.isOpen}
                 onClose={() => setConfirmationData({ isOpen: false, item: null })}
                 onConfirm={confirmAddToCart}
-                title="Add to Cart"
-                message={`Are you sure you want to add "${confirmationData.item?.name}" to the cart?`}
+                title={onItemSelect ? "Add Item" : "Add to Cart"}
+                message={`Are you sure you want to add "${confirmationData.item?.name}"?`}
             />
         </>
     );
