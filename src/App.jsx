@@ -25,7 +25,7 @@ function App() {
   };
 
   if (!isAuthenticated) {
-    return <Login onLogin={() => setIsAuthenticated(true)} title="Site Access" password="2511" />;
+    return <Login onLogin={() => setIsAuthenticated(true)} title="Site Access" password="1152" />;
   }
 
   return (
