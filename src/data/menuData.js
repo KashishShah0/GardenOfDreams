@@ -409,7 +409,7 @@ export const menuItems = [
         id: 601,
         name: "Red Bull",
         category: "Other Drinks",
-        price: 220,
+        price: 190,
     },
     {
         id: 602,
@@ -421,13 +421,13 @@ export const menuItems = [
         id: 603,
         name: "Juice",
         category: "Other Drinks",
-        price: 190,
+        price: 100,
     },
     {
         id: 604,
         name: "Cold Drinks",
         category: "Other Drinks",
-        price: 110,
+        price: 95,
     }
 ];
 
