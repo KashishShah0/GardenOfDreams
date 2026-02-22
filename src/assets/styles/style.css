@@ -223,7 +223,7 @@ h3 {
 }
 
 /* Ensure Logo doesn't overlap on small screens */
-@media (max-width: 699px) {
+@media (max-width: 768px) {
 
     .header-left,
     .header-right {
@@ -313,7 +313,7 @@ h3 {
     gap: var(--space-lg);
 }
 
-@media (max-width: 699px) {
+@media (max-width: 768px) {
     .orders-grid {
         display: flex;
         overflow-x: auto;
@@ -913,7 +913,7 @@ h3 {
 }
 
 /* RESPONSIVE DESIGN (Tablet) */
-@media (min-width: 700px) and (max-width: 1180px) {
+@media (min-width: 769px) and (max-width: 1180px) {
     .pos-layout {
         grid-template-columns: 1fr 340px;
         /* Smaller sidebar */
@@ -948,7 +948,7 @@ h3 {
     display: none;
 }
 
-@media (max-width: 699px) {
+@media (max-width: 768px) {
     .mobile-only {
         display: flex;
     }
@@ -1010,7 +1010,8 @@ h3 {
         /* Stack them */
         position: relative;
         height: 100%;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: visible;
     }
 
     /* Header Adjustments */
@@ -1205,7 +1206,8 @@ h3 {
             /* Stack them */
             position: relative;
             height: 100%;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: visible;
         }
 
         /* Header Adjustments */
@@ -1934,7 +1936,7 @@ h3 {
 }
 
 /* --- MOBILE (< 768px) --- */
-@media (max-width: 699px) {
+@media (max-width: 768px) {
 
     /* 1. LAYOUT & NAVIGATION */
     .app-layout {
@@ -2028,18 +2030,22 @@ h3 {
         display: block;
         position: relative;
         height: 100%;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: visible;
     }
 
     /* Menu Section */
     .menu-section {
         width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
         height: 100%;
         padding: 1rem 0.8rem;
         /* Reduced horizontal padding */
         padding-bottom: 80px;
         /* Space for content under nav */
         overflow-y: auto;
+        overflow-x: hidden;
     }
 
     /* Top Bar Mobile */
@@ -2125,6 +2131,7 @@ h3 {
 
     /* Smaller cards for mobile */
     .menu-item-card {
+        flex-direction: column;
         padding: 0.8rem;
         min-height: 120px;
         /* MATCH DESKTOP THEME */
@@ -2351,7 +2358,7 @@ h3 {
     }
 }
 
-@media (max-width: 699px) {
+@media (max-width: 768px) {
     .mobile-only {
         display: flex;
     }
