@@ -917,6 +917,24 @@ h3 {
     color: hsl(var(--color-bg-sidebar));
 }
 
+.primary-btn {
+    margin-top: 1.5rem;
+    padding: 0.8rem 1.5rem;
+    background: hsl(var(--color-accent));
+    border: 1px solid hsl(var(--color-accent));
+    color: hsl(var(--color-bg-sidebar));
+    border-radius: 100px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.primary-btn:hover {
+    background: hsl(var(--color-text-main));
+    border-color: hsl(var(--color-text-main));
+    color: hsl(var(--color-bg-sidebar));
+}
+
 /* RESPONSIVE DESIGN (Tablet) */
 @media (min-width: 700px) and (max-width: 1180px) {
     .pos-layout {
