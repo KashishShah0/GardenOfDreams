@@ -537,11 +537,11 @@ h3 {
     gap: var(--space-md);
     overflow-x: auto;
     overflow-y: hidden;
-    padding-bottom: 0.5rem;
+    padding: 0.5rem 0 0.5rem 0;
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--color-accent), 0.5) transparent;
     white-space: nowrap;
-    min-height: 50px;
+    min-height: 55px;
     align-items: center;
     scroll-behavior: smooth;
 }
