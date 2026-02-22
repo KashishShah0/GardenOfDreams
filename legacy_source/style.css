@@ -154,15 +154,18 @@ h3 {
     align-items: center;
     padding: 1rem 0 2rem 0;
     position: relative;
+    gap: 1rem;
     /* height: 160px; Removed fixed height to let content dictate, but ensure alignment */
 }
 
 .header-left,
 .header-right {
-    flex: 1;
-    /* Take up equal space */
+    flex: 0 1 auto;
+    /* Allow shrinking to prevent overlap */
     display: flex;
     align-items: center;
+    min-width: 0;
+    /* Allow flex items to shrink below content size */
 }
 
 .header-right {
@@ -170,13 +173,15 @@ h3 {
 }
 
 .header-center {
-    flex: 0 0 auto;
+    flex: 1 0 auto;
     display: flex;
     justify-content: center;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    left: auto;
+    transform: none;
     width: auto;
+    min-width: 300px;
+    /* Ensure search bar doesn't squeeze the title */
 }
 
 /* Ensure Logo doesn't overlap on small screens */
@@ -441,6 +446,9 @@ h3 {
     gap: 0.8rem;
     box-shadow: var(--shadow-sm);
     width: 300px;
+    max-width: 100%;
+    flex-shrink: 1;
+    min-width: 0;
     transition: box-shadow 0.3s ease;
 }
 
@@ -454,6 +462,9 @@ h3 {
     font-size: 0.95rem;
     width: 100%;
     color: black;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .icon-search {
@@ -1770,6 +1781,15 @@ h3 {
     .pos-layout {
         grid-template-columns: 1fr 320px;
         /* Slight shrink for sidebar */
+    }
+
+    .search-bar {
+        width: 250px;
+        padding: 0.7rem 1rem;
+    }
+
+    .brand-text h1 {
+        font-size: 1.8rem;
     }
 }
 
