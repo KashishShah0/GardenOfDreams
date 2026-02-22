@@ -172,7 +172,13 @@ export const menuItems = [
         id: 30,
         name: "Black Tea",
         category: "Tea",
-        price: 20,
+        price: 25,
+    },
+    {
+        id: 39,
+        name: "Milk Tea",
+        category: "Tea",
+        price: 30,
     },
     {
         id: 31,
@@ -217,10 +223,16 @@ export const menuItems = [
         price: 25,
     },
     {
+        id: 40,
+        name: "Surya Fusion",
+        category: "Others",
+        price: 30,
+    },
+    {
         id: 38,
         name: "Water Bottle",
         category: "Others",
-        price: 20,
+        price: 35,
     },
     {
         id: 101,

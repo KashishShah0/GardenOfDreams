@@ -12,7 +12,7 @@ const TopBar = () => {
                     value={tableNumber}
                     onChange={(e) => setTableNumber(e.target.value)}
                 >
-                    {['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'F1', 'F2', 'F3', 'F4', 'L1', 'L2'].map((table) => (
+                    {['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'F1', 'F2', 'F3', 'F4', 'L1', 'L2','New Table'].map((table) => (
                         <option key={table} value={table}>Table {table}</option>
                     ))}
                 </select>
