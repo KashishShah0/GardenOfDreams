@@ -13,36 +13,45 @@ function App() {
   const { activeView } = usePOS();
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Global Auth State
 
-  // Reset all scrollable containers to the top whenever the view changes.
-  // Triple-layer (double-rAF + 300ms) covers every phone timing variant.
+  // iOS Safari restores overflow-container scroll by firing a 'scroll' event.
+  // We intercept every scroll event on all containers for 800ms after a view
+  // change and force scrollTop back to 0. After 800ms the guard lifts so
+  // normal user scrolling works fine. This avoids programmatic scrollTop calls
+  // during a touch (which cancel iOS tap gestures and break button clicks).
   useEffect(() => {
-    const reset = () => {
-      document.querySelectorAll(
-        '.view-section, .menu-section, .order-sidebar, .revenue-dashboard, #view-kitchen, #view-orders, #view-bar'
-      ).forEach(el => { el.scrollTop = 0; });
-      window.scrollTo(0, 0);
-    };
-    const id1 = requestAnimationFrame(() => {
-      const id2 = requestAnimationFrame(reset);
-      return () => cancelAnimationFrame(id2);
+    const containers = Array.from(document.querySelectorAll(
+      '.menu-section, .order-sidebar, .revenue-dashboard, #view-kitchen, #view-orders, #view-bar'
+    ));
+
+    // Immediate reset on view change
+    containers.forEach(el => { el.scrollTop = 0; });
+    window.scrollTo(0, 0);
+
+    let active = true;
+    const entries = containers.map(el => {
+      const handler = () => { if (active) el.scrollTop = 0; };
+      el.addEventListener('scroll', handler, { passive: true });
+      return { el, handler };
     });
-    const t1 = setTimeout(reset, 100);
-    const t2 = setTimeout(reset, 300);
+
+    // Stop intercepting after 800 ms so the user can scroll normally
+    const guard = setTimeout(() => { active = false; }, 800);
+
     return () => {
-      cancelAnimationFrame(id1);
-      clearTimeout(t1);
-      clearTimeout(t2);
+      clearTimeout(guard);
+      active = false;
+      entries.forEach(({ el, handler }) => el.removeEventListener('scroll', handler));
     };
   }, [activeView]);
 
   const renderView = () => {
     switch (activeView) {
-      case 'pos':     return <POSView     key={activeView} />;
-      case 'orders':  return <OrdersView  key={activeView} />;
-      case 'kitchen': return <KitchenView key={activeView} />;
-      case 'bar':     return <BarView     key={activeView} />;
-      case 'revenue': return <RevenueView key={activeView} />;
-      default:        return <POSView     key={activeView} />;
+      case 'pos':     return <POSView />;
+      case 'orders':  return <OrdersView />;
+      case 'kitchen': return <KitchenView />;
+      case 'bar':     return <BarView />;
+      case 'revenue': return <RevenueView />;
+      default:        return <POSView />;
     }
   };
 
