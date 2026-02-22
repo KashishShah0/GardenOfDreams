@@ -2598,24 +2598,17 @@ h3 {
     outline: none;
 }
 
-/* Number input spinner styling */
+/* Number input spinner styling - HIDDEN */
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-    opacity: 1;
-    background: hsl(var(--color-accent), 0.3);
-    color: hsl(var(--color-accent));
-    border: none;
-    border-left: 1px solid hsl(var(--color-accent), 0.3);
-    cursor: pointer;
-    padding: 0 0.5rem;
-    font-weight: 600;
+    display: none;
 }
 
-input[type="number"]::-webkit-outer-spin-button:hover,
-input[type="number"]::-webkit-inner-spin-button:hover {
-    background: hsl(var(--color-accent), 0.6);
+/* For Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
 }
 
 .modal-actions {
