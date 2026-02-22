@@ -238,6 +238,7 @@ h3 {
     flex: 1;
     height: 100vh;
     overflow: hidden;
+    overflow-anchor: none;
 }
 
 .pos-layout {
@@ -256,6 +257,7 @@ h3 {
     padding: var(--space-xl) var(--space-2xl);
     background-color: hsl(var(--color-bg-main));
     overflow-y: auto;
+    overflow-anchor: none;
 }
 
 .page-header {
@@ -469,6 +471,7 @@ h3 {
 .menu-section {
     padding: var(--space-xl) var(--space-2xl);
     overflow-y: auto;
+    overflow-anchor: none; /* prevent browser scroll anchoring from pulling view down */
     display: flex;
     flex-direction: column;
     gap: var(--space-xl);

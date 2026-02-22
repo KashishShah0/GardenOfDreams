@@ -1,4 +1,4 @@
-import { useState } from 'react'; // Added useState
+import { useState, useEffect } from 'react'; // Added useState
 import { usePOS } from './context/POSContext';
 import Layout from './components/Layout';
 import POSView from './components/POS/POSView';
@@ -12,6 +12,15 @@ import Login from './components/Login'; // Import Login
 function App() {
   const { activeView } = usePOS();
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Global Auth State
+
+  // Reset all scrollable containers to the top whenever the view changes
+  useEffect(() => {
+    // Covers both the .view-section wrapper and the inner .menu-section
+    const scrollables = document.querySelectorAll('.view-section, .menu-section, .order-sidebar');
+    scrollables.forEach(el => { el.scrollTop = 0; });
+    // Also reset window scroll (desktop)
+    window.scrollTo(0, 0);
+  }, [activeView]);
 
   const renderView = () => {
     switch (activeView) {
