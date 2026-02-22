@@ -2598,6 +2598,26 @@ h3 {
     outline: none;
 }
 
+/* Number input spinner styling */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    opacity: 1;
+    background: hsl(var(--color-accent), 0.3);
+    color: hsl(var(--color-accent));
+    border: none;
+    border-left: 1px solid hsl(var(--color-accent), 0.3);
+    cursor: pointer;
+    padding: 0 0.5rem;
+    font-weight: 600;
+}
+
+input[type="number"]::-webkit-outer-spin-button:hover,
+input[type="number"]::-webkit-inner-spin-button:hover {
+    background: hsl(var(--color-accent), 0.6);
+}
+
 .modal-actions {
     display: flex;
     justify-content: flex-end;
@@ -2609,13 +2629,38 @@ h3 {
     padding: 0.8rem 1.5rem;
 }
 
+.btn-primary {
+    background: hsl(var(--color-accent));
+    border: 1px solid hsl(var(--color-accent));
+    color: hsl(var(--color-bg-sidebar));
+    padding: 0.8rem 1.5rem;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background: hsl(var(--color-text-main));
+    border-color: hsl(var(--color-text-main));
+}
+
 .btn-secondary {
     background: transparent;
     color: hsl(var(--color-text-muted));
+    padding: 0.8rem 1.5rem;
+    border: 1px solid hsl(var(--color-text-muted));
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
 .btn-secondary:hover {
     color: white;
+    border-color: white;
 }
 
 .payment-details-summary {
