@@ -75,7 +75,6 @@ export const POSProvider = ({ children }) => {
         });
 
         // Auto-open mobile cart on add - REMOVED per user request
-        // if (window.innerWidth <= 768) setIsMobileCartOpen(true);
     };
 
     const updateQty = (index, change) => {
