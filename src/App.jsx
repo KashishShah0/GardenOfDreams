@@ -13,13 +13,18 @@ function App() {
   const { activeView } = usePOS();
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Global Auth State
 
-  // Reset all scrollable containers to the top whenever the view changes
+  // Reset all scrollable containers to the top whenever the view changes.
+  // Double-rAF ensures we run after the browser's own scroll restoration tick.
   useEffect(() => {
-    // Covers both the .view-section wrapper and the inner .menu-section
-    const scrollables = document.querySelectorAll('.view-section, .menu-section, .order-sidebar');
-    scrollables.forEach(el => { el.scrollTop = 0; });
-    // Also reset window scroll (desktop)
-    window.scrollTo(0, 0);
+    const id = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.querySelectorAll('.view-section, .menu-section, .order-sidebar').forEach(el => {
+          el.scrollTop = 0;
+        });
+        window.scrollTo(0, 0);
+      });
+    });
+    return () => cancelAnimationFrame(id);
   }, [activeView]);
 
   const renderView = () => {

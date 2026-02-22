@@ -12,13 +12,21 @@ if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 
-// After the page fully loads, force all scrollable containers back to the top.
-// Mobile Chrome restores inner overflow:auto scroll AFTER React renders,
-// so we need one final reset once the load event fires.
-window.addEventListener('load', () => {
+// Mobile Chrome restores inner overflow:auto scroll AFTER React renders AND
+// after the load event fires, so we use a double-rAF to guarantee we run
+// after the browser has finished its own scroll restoration.
+const resetAllScroll = () => {
   window.scrollTo(0, 0);
   document.querySelectorAll('.view-section, .menu-section, .order-sidebar').forEach(el => {
     el.scrollTop = 0;
+  });
+};
+
+window.addEventListener('load', () => {
+  // Frame 1: browser finishes layout/scroll restore
+  requestAnimationFrame(() => {
+    // Frame 2: we beat any final async scroll adjustments
+    requestAnimationFrame(resetAllScroll);
   });
 }, { once: true });
 
