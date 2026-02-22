@@ -14,27 +14,35 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false); // Global Auth State
 
   // Reset all scrollable containers to the top whenever the view changes.
-  // Double-rAF ensures we run after the browser's own scroll restoration tick.
+  // Triple-layer (double-rAF + 300ms) covers every phone timing variant.
   useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        document.querySelectorAll('.view-section, .menu-section, .order-sidebar').forEach(el => {
-          el.scrollTop = 0;
-        });
-        window.scrollTo(0, 0);
-      });
+    const reset = () => {
+      document.querySelectorAll(
+        '.view-section, .menu-section, .order-sidebar, .revenue-dashboard, #view-kitchen, #view-orders, #view-bar'
+      ).forEach(el => { el.scrollTop = 0; });
+      window.scrollTo(0, 0);
+    };
+    const id1 = requestAnimationFrame(() => {
+      const id2 = requestAnimationFrame(reset);
+      return () => cancelAnimationFrame(id2);
     });
-    return () => cancelAnimationFrame(id);
+    const t1 = setTimeout(reset, 100);
+    const t2 = setTimeout(reset, 300);
+    return () => {
+      cancelAnimationFrame(id1);
+      clearTimeout(t1);
+      clearTimeout(t2);
+    };
   }, [activeView]);
 
   const renderView = () => {
     switch (activeView) {
-      case 'pos': return <POSView />;
-      case 'orders': return <OrdersView />;
-      case 'kitchen': return <KitchenView />;
-      case 'bar': return <BarView />;
-      case 'revenue': return <RevenueView />;
-      default: return <POSView />;
+      case 'pos':     return <POSView     key={activeView} />;
+      case 'orders':  return <OrdersView  key={activeView} />;
+      case 'kitchen': return <KitchenView key={activeView} />;
+      case 'bar':     return <BarView     key={activeView} />;
+      case 'revenue': return <RevenueView key={activeView} />;
+      default:        return <POSView     key={activeView} />;
     }
   };
 

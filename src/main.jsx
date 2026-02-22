@@ -12,22 +12,25 @@ if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 
-// Mobile Chrome restores inner overflow:auto scroll AFTER React renders AND
-// after the load event fires, so we use a double-rAF to guarantee we run
-// after the browser has finished its own scroll restoration.
+// Force every overflow container back to the top after page load.
+// Different phones/browsers restore inner-element scroll at different times
+// (some after rAF, some after 100ms, some after 300ms on slow devices).
+// We fire resets at every stage to guarantee one of them wins.
 const resetAllScroll = () => {
   window.scrollTo(0, 0);
-  document.querySelectorAll('.view-section, .menu-section, .order-sidebar').forEach(el => {
-    el.scrollTop = 0;
-  });
+  document.querySelectorAll(
+    '.view-section, .menu-section, .order-sidebar, .revenue-dashboard, #view-kitchen, #view-orders, #view-bar'
+  ).forEach(el => { el.scrollTop = 0; });
 };
 
 window.addEventListener('load', () => {
-  // Frame 1: browser finishes layout/scroll restore
-  requestAnimationFrame(() => {
-    // Frame 2: we beat any final async scroll adjustments
-    requestAnimationFrame(resetAllScroll);
+  requestAnimationFrame(() => {           // frame 1 — after first paint
+    requestAnimationFrame(() => {         // frame 2 — after browser scroll restore
+      resetAllScroll();
+    });
   });
+  setTimeout(resetAllScroll, 100);        // 100 ms — mid-range Androids
+  setTimeout(resetAllScroll, 300);        // 300 ms — slow / budget phones
 }, { once: true });
 
 createRoot(document.getElementById('root')).render(

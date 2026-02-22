@@ -73,6 +73,10 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /* Prevent browser scroll anchoring on every element in the app.
+       Without this, any element load (images, fetched data) can cause
+       the browser to silently scroll the nearest overflow container. */
+    overflow-anchor: none;
 }
 
 body {
