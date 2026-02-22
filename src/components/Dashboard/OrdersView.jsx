@@ -143,8 +143,7 @@ const OrdersView = () => {
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                     {!order.paid && (
                                         <button
-                                            className="btn-primary"
-                                            style={{ padding: '4px 12px', fontSize: '0.9rem' }}
+                                            className="action-btn btn-primary"
                                             onClick={() => setAddingItemOrder(order)}
                                         >
                                             Add Item
