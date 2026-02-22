@@ -73,10 +73,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    /* Prevent browser scroll anchoring on every element in the app.
-       Without this, any element load (images, fetched data) can cause
-       the browser to silently scroll the nearest overflow container. */
-    overflow-anchor: none;
 }
 
 body {
@@ -196,33 +192,38 @@ h3 {
 }
 
 .top-bar {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: var(--space-md) 0 var(--space-xl) 0;
+    position: relative;
+    /* height: 160px; Removed fixed height to let content dictate, but ensure alignment */
 }
 
-.header-left {
+.header-left,
+.header-right {
+    flex: 1;
+    /* Take up equal space */
     display: flex;
     align-items: center;
-    justify-content: flex-start;
 }
 
 .header-right {
-    display: flex;
-    align-items: center;
     justify-content: flex-end;
 }
 
 .header-center {
+    flex: 0 0 auto;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 0 var(--space-lg);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: auto;
 }
 
 /* Ensure Logo doesn't overlap on small screens */
-@media (max-width: 768px) {
+@media (max-width: 699px) {
 
     .header-left,
     .header-right {
@@ -242,7 +243,6 @@ h3 {
     flex: 1;
     height: 100vh;
     overflow: hidden;
-    overflow-anchor: none;
 }
 
 .pos-layout {
@@ -261,8 +261,6 @@ h3 {
     padding: var(--space-xl) var(--space-2xl);
     background-color: hsl(var(--color-bg-main));
     overflow-y: auto;
-    overflow-anchor: none;
-    overscroll-behavior-y: contain;
 }
 
 .page-header {
@@ -315,7 +313,7 @@ h3 {
     gap: var(--space-lg);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 699px) {
     .orders-grid {
         display: flex;
         overflow-x: auto;
@@ -476,8 +474,6 @@ h3 {
 .menu-section {
     padding: var(--space-xl) var(--space-2xl);
     overflow-y: auto;
-    overflow-anchor: none; /* prevent browser scroll anchoring from pulling view down */
-    overscroll-behavior-y: contain; /* stop elastic/rubber-band bounce past top on iOS/Android */
     display: flex;
     flex-direction: column;
     gap: var(--space-xl);
@@ -917,7 +913,7 @@ h3 {
 }
 
 /* RESPONSIVE DESIGN (Tablet) */
-@media (min-width: 769px) and (max-width: 1180px) {
+@media (min-width: 700px) and (max-width: 1180px) {
     .pos-layout {
         grid-template-columns: 1fr 340px;
         /* Smaller sidebar */
@@ -952,7 +948,7 @@ h3 {
     display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 699px) {
     .mobile-only {
         display: flex;
     }
@@ -1014,27 +1010,25 @@ h3 {
         /* Stack them */
         position: relative;
         height: 100%;
-        overflow-x: hidden;
-        overflow-y: visible;
+        overflow: hidden;
     }
 
     /* Header Adjustments */
     .top-bar {
-        display: flex;
-        flex-direction: column;
         padding: 0.5rem 0 1rem 0;
         flex-wrap: wrap;
         gap: 1rem;
         height: auto;
-        align-items: center;
     }
 
     .header-center {
+        position: relative;
+        left: auto;
+        transform: none;
         order: -1;
         /* Logo first */
         width: 100%;
-        justify-content: center;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
     }
 
     .brand-text h1 {
@@ -1211,27 +1205,25 @@ h3 {
             /* Stack them */
             position: relative;
             height: 100%;
-            overflow-x: hidden;
-            overflow-y: visible;
+            overflow: hidden;
         }
 
         /* Header Adjustments */
         .top-bar {
-            display: flex;
-            flex-direction: column;
             padding: 0.5rem 0 1rem 0;
             flex-wrap: wrap;
             gap: 1rem;
             height: auto;
-            align-items: center;
         }
 
         .header-center {
+            position: relative;
+            left: auto;
+            transform: none;
             order: -1;
             /* Logo first */
             width: 100%;
-            justify-content: center;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
         }
 
         .brand-text h1 {
@@ -1598,8 +1590,6 @@ h3 {
 #view-kitchen {
     padding: 2rem 3rem;
     overflow-y: auto;
-    overflow-anchor: none;
-    overscroll-behavior-y: contain;
     background-color: hsl(var(--color-bg-main));
 }
 
@@ -1759,8 +1749,6 @@ h3 {
     gap: 3rem;
     padding-bottom: 3rem;
     overflow-y: auto;
-    overflow-anchor: none;
-    overscroll-behavior-y: contain;
     height: calc(100vh - 100px);
     /* Fill space below header */
 }
@@ -1946,7 +1934,7 @@ h3 {
 }
 
 /* --- MOBILE (< 768px) --- */
-@media (max-width: 768px) {
+@media (max-width: 699px) {
 
     /* 1. LAYOUT & NAVIGATION */
     .app-layout {
@@ -2040,27 +2028,22 @@ h3 {
         display: block;
         position: relative;
         height: 100%;
-        overflow-x: hidden;
-        overflow-y: visible;
+        overflow: hidden;
     }
 
     /* Menu Section */
     .menu-section {
         width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
         height: 100%;
         padding: 1rem 0.8rem;
         /* Reduced horizontal padding */
         padding-bottom: 80px;
         /* Space for content under nav */
         overflow-y: auto;
-        overflow-x: hidden;
     }
 
     /* Top Bar Mobile */
     .top-bar {
-        display: flex;
         flex-direction: column;
         gap: 1rem;
         padding-bottom: 0.5rem;
@@ -2071,6 +2054,8 @@ h3 {
     .header-left,
     .header-right,
     .header-center {
+        position: static;
+        transform: none;
         width: 100%;
         justify-content: center;
         display: flex;
@@ -2140,7 +2125,6 @@ h3 {
 
     /* Smaller cards for mobile */
     .menu-item-card {
-        flex-direction: column;
         padding: 0.8rem;
         min-height: 120px;
         /* MATCH DESKTOP THEME */
@@ -2367,7 +2351,7 @@ h3 {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 699px) {
     .mobile-only {
         display: flex;
     }
